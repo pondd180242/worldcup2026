@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚽ บ้านท้ายซอย - เลือกทีมบอลโลก 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Bebas+Neue&display=swap');
+  :root{--gold:#FFD700;--gold2:#FFA500;--darker:#060b15;--card:#111827;--card2:#1a2540;--accent:#00e5ff;--green:#00ff88;--red:#ff4466;--line:#06C755;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--darker);color:#eee;font-family:'Sarabun',sans-serif;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(0,229,255,.07) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(255,165,0,.07) 0%,transparent 50%);pointer-events:none;z-index:0;}
+  .container{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:20px;}
+  .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px;}
+  .login-box{background:var(--card);border:1px solid rgba(255,215,0,.15);border-radius:24px;padding:40px 36px;max-width:400px;width:100%;}
+  .login-box h1{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:4px;background:linear-gradient(135deg,var(--gold),var(--gold2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
+  .login-box p{color:#888;font-size:.95rem;margin-bottom:28px;}
+  .btn-line{display:flex;align-items:center;justify-content:center;gap:12px;background:var(--line);color:#fff;border:none;border-radius:14px;padding:16px 28px;font-family:'Sarabun',sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer;width:100%;transition:all .2s;}
+  .btn-line:hover{background:#05a847;transform:translateY(-2px);box-shadow:0 8px 24px rgba(6,199,85,.35);}
+  .btn-line svg{width:28px;height:28px;}
+  .login-note{color:#555;font-size:.78rem;margin-top:16px;}
+  .user-bar{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:10px 16px;margin-bottom:16px;}
+  .user-avatar{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);object-fit:cover;}
+  .user-name{font-weight:700;font-size:.95rem;flex:1;}
+  .btn-logout{background:rgba(255,255,255,.07);border:none;border-radius:8px;padding:6px 12px;color:#888;font-family:'Sarabun',sans-serif;font-size:.8rem;cursor:pointer;}
+  .tabs{display:flex;gap:6px;margin:16px 0;background:var(--card);padding:6px;border-radius:14px;border:1px solid rgba(255,255,255,.06);}
+  .tab-btn{flex:1;padding:9px 4px;border:none;border-radius:10px;background:transparent;color:#888;font-family:'Sarabun',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .3s;}
+  .tab-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;}
+  .section{display:none;}.section.active{display:block;}
+  .room-card{background:var(--card);border:1px solid rgba(255,215,0,.15);border-radius:20px;padding:24px;margin-bottom:20px;}
+  .room-card h2{font-size:1.2rem;color:var(--gold);margin-bottom:16px;}
+  .room-info{background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:16px;margin-top:12px;}
+  .room-code{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:8px;color:var(--gold);text-align:center;display:block;}
+  .room-link{background:var(--card2);border-radius:8px;padding:8px 12px;font-size:.8rem;color:var(--accent);word-break:break-all;margin-top:8px;cursor:pointer;text-align:center;}
+  .input-row{display:flex;gap:10px;flex-wrap:wrap;}
+  input[type="text"]{flex:1;min-width:180px;background:var(--card2);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;color:#fff;font-family:'Sarabun',sans-serif;font-size:1rem;outline:none;transition:border-color .3s;}
+  input[type="text"]:focus{border-color:var(--gold);}
+  input[type="text"]::placeholder{color:#555;}
+  .btn{padding:11px 20px;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:.93rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+  .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;}
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,165,0,.4);}
+  .btn-accent{background:linear-gradient(135deg,var(--accent),#0099bb);color:#000;}
+  .btn-green{background:linear-gradient(135deg,var(--green),#00cc66);color:#000;}
+  .btn-danger{background:rgba(255,68,102,.12);border:1px solid rgba(255,68,102,.25);color:var(--red);}
+  .btn-sm{padding:7px 14px;font-size:.82rem;}
+  .members-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .member-chip{background:var(--card2);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:5px 12px;font-size:.82rem;display:flex;align-items:center;gap:6px;}
+  .member-chip img{width:20px;height:20px;border-radius:50%;}
+  .member-chip.has-team{border-color:var(--green);background:rgba(0,255,136,.07);}
+  .member-chip.conflict{border-color:var(--red);background:rgba(255,68,102,.07);animation:pulse-red 1.5s infinite;}
+  @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(255,68,102,0)}50%{box-shadow:0 0 0 5px rgba(255,68,102,.12)}}
+  .group-header{display:flex;align-items:center;gap:10px;margin:20px 0 10px;}
+  .group-label{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:2px;}
+  .group-line{flex:1;height:1px;background:rgba(255,215,0,.12);}
+  .teams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:9px;margin-bottom:8px;}
+  .team-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:11px 13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:9px;position:relative;overflow:hidden;}
+  .team-card:hover{border-color:var(--gold);transform:translateY(-1px);}
+  .team-card.selected{border-color:var(--green);background:rgba(0,255,136,.07);}
+  .team-card.taken{opacity:.4;cursor:not-allowed;}
+  .team-card.conflict-team{border-color:var(--red)!important;background:rgba(255,68,102,.09)!important;animation:pulse-red 1.5s infinite;}
+  .team-flag{font-size:1.5rem;line-height:1;}
+  .team-info{flex:1;min-width:0;}
+  .team-name{font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .team-sub{font-size:.68rem;color:#666;}
+  .check-icon{position:absolute;top:5px;right:7px;color:var(--green);font-size:.85rem;}
+  .team-pickers{display:flex;align-items:center;gap:3px;margin-top:5px;flex-wrap:wrap;}
+  .picker-av{width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(255,255,255,.18);object-fit:cover;}
+  .picker-names{font-size:.63rem;color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;}
+  .summary-panel{background:var(--card);border:1px solid rgba(255,215,0,.12);border-radius:16px;padding:18px;margin-top:20px;}
+  .summary-panel h3{color:var(--gold);font-size:1rem;margin-bottom:12px;}
+  .summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:8px;}
+  .sum-item{background:var(--card2);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:9px;}
+  .sum-item.mine{border-color:rgba(0,255,136,.25);background:rgba(0,255,136,.05);}
+  .sum-item.clash{border-color:rgba(255,68,102,.25);background:rgba(255,68,102,.05);}
+  .sum-flag{font-size:1.5rem;line-height:1;}
+  .sum-info{flex:1;min-width:0;}
+  .sum-team{font-size:.84rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .sum-picker{display:flex;align-items:center;gap:4px;margin-top:4px;}
+  .sum-picker img{width:18px;height:18px;border-radius:50%;}
+  .sum-picker span{font-size:.7rem;color:#aaa;}
+  .conflict-banner{background:rgba(255,68,102,.08);border:1px solid rgba(255,68,102,.35);border-radius:16px;padding:18px;margin:14px 0;text-align:center;animation:pulse-border 2s infinite;}
+  @keyframes pulse-border{0%,100%{border-color:rgba(255,68,102,.35)}50%{border-color:rgba(255,68,102,.7)}}
+  .conflict-banner h3{color:var(--red);margin-bottom:6px;}
+  .results-panel{background:var(--card);border:1px solid rgba(255,215,0,.13);border-radius:20px;padding:22px;margin-top:16px;}
+  .results-panel h2{color:var(--gold);margin-bottom:14px;}
+  .result-item{display:flex;align-items:center;gap:12px;padding:11px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:7px;border:1px solid rgba(255,255,255,.04);}
+  .result-item img{width:28px;height:28px;border-radius:50%;}
+
+  /* GAMES */
+  .game-select h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px;color:var(--gold);text-align:center;margin-bottom:6px;}
+  .game-select p{color:#888;text-align:center;font-size:.88rem;margin-bottom:20px;}
+  .game-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;}
+  .game-card{background:var(--card);border:2px solid rgba(255,255,255,.07);border-radius:16px;padding:22px 18px;cursor:pointer;transition:all .25s;text-align:center;}
+  .game-card:hover{transform:translateY(-3px);}
+  .game-card.rps:hover{border-color:var(--gold);}
+  .game-card.speed:hover{border-color:var(--green);}
+  .game-card.clock:hover{border-color:var(--accent);}
+  .game-card .gc-icon{font-size:2.8rem;margin-bottom:10px;display:block;}
+  .game-card .gc-title{font-size:1.1rem;font-weight:800;margin-bottom:8px;}
+  .game-card .gc-desc{font-size:.8rem;color:#888;line-height:1.6;}
+  .game-room{background:var(--card);border:2px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;margin-top:4px;}
+  .game-room.rps-theme{border-color:rgba(255,215,0,.2);}
+  .game-room.speed-theme{border-color:rgba(0,255,136,.2);}
+  .game-room.clock-theme{border-color:rgba(0,229,255,.2);}
+  .game-room h2{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:2px;text-align:center;margin-bottom:4px;}
+  .game-back{background:none;border:none;color:#666;font-family:'Sarabun',sans-serif;font-size:.85rem;cursor:pointer;margin-bottom:14px;padding:0;display:block;}
+  .game-back:hover{color:#aaa;}
+  .instructions{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:16px;margin-bottom:16px;}
+  .instructions h3{font-size:.95rem;margin-bottom:10px;color:var(--gold);}
+  .instructions ul{list-style:none;}
+  .instructions ul li{font-size:.85rem;color:#bbb;padding:5px 0 5px 20px;border-bottom:1px solid rgba(255,255,255,.04);position:relative;}
+  .instructions ul li:last-child{border:none;}
+  .instructions ul li::before{content:'▶';color:var(--accent);font-size:.55rem;position:absolute;left:4px;top:8px;}
+  .game-status{text-align:center;padding:10px;background:rgba(255,255,255,.04);border-radius:10px;margin-bottom:12px;font-weight:700;font-size:.9rem;}
+  .game-conflict-info{text-align:center;color:#888;font-size:.83rem;margin-bottom:10px;}
+  .game-players{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .gp-chip{background:var(--card2);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:5px 12px;font-size:.8rem;display:flex;align-items:center;gap:6px;}
+  .gp-chip img{width:20px;height:20px;border-radius:50%;}
+  .gp-chip.ready{border-color:var(--green);background:rgba(0,255,136,.07);}
+  /* RPS */
+  .rps-choices{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:14px 0;}
+  .rps-btn{width:86px;height:86px;border-radius:50%;border:2px solid rgba(255,255,255,.1);background:var(--card2);font-size:2.3rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+  .rps-btn span{font-size:.52rem;color:#888;margin-top:3px;font-family:'Sarabun',sans-serif;}
+  .rps-btn:hover{transform:scale(1.1);border-color:var(--gold);background:rgba(255,215,0,.08);}
+  .rps-btn.chosen{border-color:var(--gold);background:rgba(255,215,0,.1);}
+  .rps-btn:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+  /* SPEED */
+  .speed-score-row{display:flex;justify-content:center;gap:24px;margin-bottom:14px;flex-wrap:wrap;}
+  .speed-score-box{background:var(--card2);border-radius:12px;padding:12px 20px;text-align:center;min-width:90px;}
+  .speed-score-box .sc-name{font-size:.72rem;color:#888;margin-bottom:4px;}
+  .speed-score-box .sc-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--green);}
+  .speed-score-box.mine .sc-num{color:var(--gold);}
+  .speed-timer{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--accent);letter-spacing:3px;margin:8px 0;text-align:center;}
+  .speed-tap-btn{width:150px;height:150px;border-radius:50%;border:4px solid var(--green);background:rgba(0,255,136,.07);font-size:3rem;cursor:pointer;transition:all .1s;display:flex;align-items:center;justify-content:center;margin:0 auto;}
+  .speed-tap-btn:active{transform:scale(.92);background:rgba(0,255,136,.2);}
+  .speed-tap-btn:disabled{opacity:.3;cursor:not-allowed;}
+  /* CLOCK */
+  .clock-area{text-align:center;}
+  .clock-track{position:relative;width:100%;height:26px;background:rgba(255,255,255,.06);border-radius:13px;overflow:hidden;margin:14px 0;}
+  .clock-bar{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:13px;}
+  .clock-marker{position:absolute;top:0;left:50%;transform:translateX(-50%);width:3px;height:100%;background:var(--gold);opacity:.8;}
+  .clock-time-display{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--accent);letter-spacing:4px;margin:8px 0;}
+  .clock-target{font-size:.88rem;color:#888;margin-bottom:12px;}
+  .clock-stop-btn{width:140px;height:140px;border-radius:50%;border:4px solid var(--accent);background:rgba(0,229,255,.07);font-size:2.5rem;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;margin:0 auto;}
+  .clock-stop-btn:active{transform:scale(.92);background:rgba(0,229,255,.2);}
+  .clock-stop-btn:disabled{opacity:.3;cursor:not-allowed;}
+  .clock-result-row{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:12px;}
+  .clock-result-box{background:var(--card2);border-radius:12px;padding:12px 16px;text-align:center;min-width:110px;}
+  .clock-result-box .cr-name{font-size:.72rem;color:#888;margin-bottom:4px;}
+  .clock-result-box .cr-time{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;}
+  .clock-result-box .cr-diff{font-size:.72rem;margin-top:2px;color:#666;}
+  .clock-result-box.winner-box{border:1px solid rgba(0,255,136,.3);background:rgba(0,255,136,.07);}
+  /* RESULT */
+  .game-result{text-align:center;padding:18px;border-radius:14px;margin-top:12px;}
+  .game-result.win{background:rgba(0,255,136,.09);border:1px solid rgba(0,255,136,.25);}
+  .game-result.lose{background:rgba(255,68,102,.09);border:1px solid rgba(255,68,102,.25);}
+  .game-result.draw{background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.18);}
+  .game-result .gr-emoji{font-size:2.3rem;display:block;margin-bottom:8px;}
+  .game-result h3{font-size:1.3rem;margin-bottom:6px;}
+  .vs-display{display:flex;align-items:center;justify-content:center;gap:16px;margin:10px 0;flex-wrap:wrap;}
+  .player-choice{text-align:center;}
+  .player-choice .ce{font-size:2.4rem;display:block;}
+  .player-choice .cn{font-size:.75rem;color:#888;}
+  .vs-text{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:#444;}
+  /* TOAST */
+  #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card2);border:1px solid rgba(255,215,0,.25);border-radius:12px;padding:11px 22px;color:#fff;font-size:.88rem;z-index:9999;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+  #toast.show{transform:translateX(-50%) translateY(0);}
+  .label{font-size:.78rem;color:#666;margin-bottom:5px;}
+  .divider{height:1px;background:rgba(255,255,255,.05);margin:14px 0;}
+  .mt-12{margin-top:12px;}.text-center{text-align:center;}
+  .conn-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px;animation:blink 1.5s infinite;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  @media(max-width:480px){.teams-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr))}.game-cards{grid-template-columns:1fr}.rps-btn{width:74px;height:74px;font-size:2rem;}}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div style="font-size:2.8rem;margin-bottom:8px">🏆</div>
+    <h1>บ้านท้ายซอย</h1>
+    <p>เลือกทีมเชียร์บอลโลก 2026<br>Login ด้วย LINE เพื่อบันทึกสิทธิ์ของคุณ</p>
+    <button class="btn-line" onclick="loginWithLine()">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.63 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+      เข้าสู่ระบบด้วย LINE
+    </button>
+    <div class="login-note">ระบบจะดึงชื่อและรูปโปรไฟล์ LINE<br>เพื่อแสดงให้เพื่อนในกลุ่มเห็น</div>
+  </div>
+</div>
+
+<div id="mainApp" style="display:none">
+<div class="container">
+  <div class="user-bar">
+    <img id="userAvatar" class="user-avatar" src="" alt="">
+    <span class="user-name" id="userName"></span>
+    <span><span class="conn-dot"></span><span style="font-size:.75rem;color:#666">Firebase</span></span>
+    <button class="btn-logout" onclick="logout()">ออก</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('pick')">⚽ เลือกทีม</button>
+    <button class="tab-btn" onclick="switchTab('results')">🏅 ผลการจับ</button>
+    <button class="tab-btn" onclick="switchTab('games')">🎮 ตัดสิน</button>
+  </div>
+
+  <!-- PICK TAB -->
+  <div id="tab-pick" class="section active">
+    <div class="room-card">
+      <h2>🏠 บ้านท้ายซอย</h2>
+      <div id="setup-area">
+        <div class="label">เข้าร่วมห้องที่มีอยู่</div>
+        <div class="input-row">
+          <input type="text" id="roomInput" placeholder="รหัส 6 ตัว..." maxlength="6" style="text-transform:uppercase;letter-spacing:4px;font-weight:700">
+          <button class="btn btn-accent" onclick="joinRoom()">เข้าร่วม</button>
+        </div>
+        <div class="divider"></div>
+        <div class="text-center"><button class="btn btn-gold" onclick="createRoom()">✨ สร้างห้องใหม่</button></div>
+      </div>
+      <div id="room-info-area" style="display:none">
+        <div class="room-info">
+          <div class="label text-center">รหัสห้อง — แชร์ให้เพื่อน</div>
+          <span class="room-code" id="roomCodeDisplay"></span>
+          <div class="room-link" id="shareLinkEl" onclick="copyLink()">📋 คลิกเพื่อคัดลอกลิงค์</div>
+        </div>
+        <div class="mt-12">
+          <div class="label">สมาชิก (<span id="memberCount">0</span> คน)</div>
+          <div class="members-list" id="membersList"></div>
+        </div>
+        <div class="mt-12 text-center"><button class="btn btn-danger btn-sm" onclick="resetRoom()">🗑️ รีเซ็ตห้อง</button></div>
+      </div>
+    </div>
+    <div id="conflict-area" style="display:none" class="conflict-banner">
+      <h3>⚠️ ทีมเดียวกัน! ต้องแข่งกัน</h3>
+      <p id="conflictMsg" style="color:#bbb;font-size:.9rem"></p>
+      <button class="btn btn-accent mt-12" onclick="switchTab('games')">🎮 ไปเลือกเกมตัดสิน!</button>
+    </div>
+    <div id="team-selector" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+        <div style="font-size:1.05rem;font-weight:700">เลือกทีมที่ต้องการเชียร์</div>
+        <button class="btn btn-gold btn-sm" id="confirmBtn" onclick="confirmTeam()" style="display:none">✅ ยืนยัน!</button>
+      </div>
+      <div id="groups-container"></div>
+    </div>
+    <div id="summary-panel" class="summary-panel" style="display:none">
+      <h3>👥 สรุปการเลือกทีม</h3>
+      <div id="summary-grid" class="summary-grid"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS TAB -->
+  <div id="tab-results" class="section">
+    <div class="results-panel">
+      <h2>🏅 สรุปทีมที่ได้รับ</h2>
+      <div id="results-list"><div style="color:#555;text-align:center;padding:28px 0">ยังไม่มีการเลือกทีม...</div></div>
+    </div>
+  </div>
+
+  <!-- GAMES TAB -->
+  <div id="tab-games" class="section">
+
+    <!-- เลือกเกม -->
+    <div id="gameSelect">
+      <div class="game-select">
+        <h2>🎮 เลือกเกมตัดสิน</h2>
+        <p id="gameConflictInfo">เข้าห้องและเลือกทีมให้ซ้ำกับเพื่อนก่อน</p>
+      </div>
+      <div class="game-cards">
+        <div class="game-card rps" onclick="openGame('rps')">
+          <span class="gc-icon">✊</span>
+          <div class="gc-title" style="color:var(--gold)">เป่ายิงฉุบ</div>
+          <div class="gc-desc">คลาสสิกตลอดกาล!<br>✊ กำปั้น / 🖐 กระดาษ / ✌️ กรรไกร<br>ใครชนะได้ทีมนั้นไปเลย</div>
+        </div>
+        <div class="game-card speed" onclick="openGame('speed')">
+          <span class="gc-icon">👆</span>
+          <div class="gc-title" style="color:var(--green)">กดปุ่มให้เร็ว</div>
+          <div class="gc-desc">วัดความเร็วของนิ้ว!<br>กดปุ่มให้ได้มากสุดใน 5 วินาที<br>ใครกดได้เยอะกว่าชนะ</div>
+        </div>
+        <div class="game-card clock" onclick="openGame('clock')">
+          <span class="gc-icon">⏱️</span>
+          <div class="gc-title" style="color:var(--accent)">หยุดตรงเวลา</div>
+          <div class="gc-desc">วัดไหวพริบและจังหวะ!<br>กดหยุดให้ใกล้ 5.00 วินาทีมากที่สุด<br>ใครแม่นกว่าชนะ</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RPS -->
+    <div id="gameRPS" style="display:none">
+      <button class="game-back" onclick="closeGame()">← กลับเลือกเกม</button>
+      <div class="game-room rps-theme">
+        <h2 style="color:var(--gold)">✊ เป่ายิงฉุบ ✌️</h2>
+        <div class="instructions">
+          <h3>📖 วิธีเล่น</h3>
+          <ul>
+            <li>เลือกมือของคุณ: ✊ กำปั้น / 🖐 กระดาษ / ✌️ กรรไกร</li>
+            <li>กำปั้นชนะกรรไกร | กรรไกรชนะกระดาษ | กระดาษชนะกำปั้น</li>
+            <li>ทั้งสองฝ่ายเลือกพร้อมกัน ผลเปิดเมื่อครบทั้งคู่</li>
+            <li>ถ้าเสมอ กดเล่นใหม่ได้เลย!</li>
+          </ul>
+        </div>
+        <div class="game-conflict-info" id="rpsConflictInfo"></div>
+        <div class="game-status" id="rpsStatus">รอเข้าห้อง...</div>
+        <div class="game-players" id="rpsPlayers"></div>
+        <div class="rps-choices">
+          <button class="rps-btn" id="rpsRock" onclick="chooseRPS('rock')">✊<span>กำปั้น</span></button>
+          <button class="rps-btn" id="rpsPaper" onclick="chooseRPS('paper')">🖐<span>กระดาษ</span></button>
+          <button class="rps-btn" id="rpsScissors" onclick="chooseRPS('scissors')">✌️<span>กรรไกร</span></button>
+        </div>
+        <div id="rpsWaiting" style="display:none;text-align:center;color:#888;font-size:.88rem;margin:8px 0">⏳ รอผู้เล่นอีกฝ่าย...</div>
+        <div id="rpsResultArea"></div>
+        <div class="text-center mt-12" id="rpsPlayAgain" style="display:none">
+          <button class="btn btn-gold" onclick="resetGame('rps')">🔄 เล่นอีกรอบ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPEED CLICK -->
+    <div id="gameSpeed" style="display:none">
+      <button class="game-back" onclick="closeGame()">← กลับเลือกเกม</button>
+      <div class="game-room speed-theme">
+        <h2 style="color:var(--green)">👆 กดปุ่มให้เร็ว</h2>
+        <div class="instructions">
+          <h3>📖 วิธีเล่น</h3>
+          <ul>
+            <li>กด "ฉันพร้อมแล้ว!" รอให้เพื่อนกดพร้อมด้วย</li>
+            <li>เมื่อทั้งคู่พร้อม จะนับถอยหลัง 3... 2... 1... แล้วเริ่ม!</li>
+            <li>กดปุ่มใหญ่ให้ได้มากที่สุดภายใน 5 วินาที</li>
+            <li>หมดเวลา คะแนนเปรียบเทียบกัน ใครมากกว่าชนะ!</li>
+          </ul>
+        </div>
+        <div class="game-conflict-info" id="speedConflictInfo"></div>
+        <div class="game-status" id="speedStatus">รอเข้าห้อง...</div>
+        <div class="game-players" id="speedPlayers"></div>
+        <div class="speed-score-row" id="speedScoreRow"></div>
+        <div class="speed-timer" id="speedTimer"></div>
+        <button class="speed-tap-btn" id="speedTapBtn" onclick="speedTap()" disabled>👆</button>
+        <div class="mt-12 text-center">
+          <button class="btn btn-green" id="speedReadyBtn" onclick="speedReady()" style="display:none">✅ ฉันพร้อมแล้ว!</button>
+        </div>
+        <div id="speedResultArea"></div>
+        <div class="text-center mt-12" id="speedPlayAgain" style="display:none">
+          <button class="btn btn-gold" onclick="resetGame('speed')">🔄 เล่นอีกรอบ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STOP THE CLOCK -->
+    <div id="gameClock" style="display:none">
+      <button class="game-back" onclick="closeGame()">← กลับเลือกเกม</button>
+      <div class="game-room clock-theme">
+        <h2 style="color:var(--accent)">⏱️ หยุดตรงเวลา</h2>
+        <div class="instructions">
+          <h3>📖 วิธีเล่น</h3>
+          <ul>
+            <li>กด "ฉันพร้อมแล้ว!" รอให้เพื่อนพร้อมด้วย</li>
+            <li>แถบสีจะเริ่มวิ่งจาก 0 ถึง 10 วินาที</li>
+            <li>เป้าหมายคือกดปุ่มหยุดให้ใกล้ 5.00 วินาทีมากที่สุด</li>
+            <li>ใครห่างจาก 5.00 น้อยกว่า ชนะ! (ทั้งคู่เล่นพร้อมกัน)</li>
+          </ul>
+        </div>
+        <div class="game-conflict-info" id="clockConflictInfo"></div>
+        <div class="game-status" id="clockStatus">รอเข้าห้อง...</div>
+        <div class="game-players" id="clockPlayers"></div>
+        <div class="clock-area">
+          <div class="clock-target">🎯 เป้าหมาย: หยุดที่ <strong style="color:var(--gold)">5.00</strong> วินาที</div>
+          <div class="clock-track"><div class="clock-bar" id="clockBar" style="width:0%"></div><div class="clock-marker"></div></div>
+          <div class="clock-time-display" id="clockTimeDisplay">0.00</div>
+          <button class="clock-stop-btn" id="clockStopBtn" onclick="clockStop()" disabled>⏹️</button>
+          <div class="mt-12 text-center">
+            <button class="btn btn-accent" id="clockReadyBtn" onclick="clockReady()" style="display:none">✅ ฉันพร้อมแล้ว!</button>
+          </div>
+        </div>
+        <div class="clock-result-row" id="clockResultRow"></div>
+        <div id="clockResultArea"></div>
+        <div class="text-center mt-12" id="clockPlayAgain" style="display:none">
+          <button class="btn btn-gold" onclick="resetGame('clock')">🔄 เล่นอีกรอบ</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey:"AIzaSyBzWUvd-2SFV6MIn5rvdnInSkcNpfOrcIw",
+  authDomain:"worldcup2026-65dcd.firebaseapp.com",
+  databaseURL:"https://worldcup2026-65dcd-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"worldcup2026-65dcd",
+  storageBucket:"worldcup2026-65dcd.firebasestorage.app",
+  messagingSenderId:"675191771950",
+  appId:"1:675191771950:web:70d1e50ce0403712b4a0bf"
+};
+const db = getDatabase(initializeApp(firebaseConfig));
+const LINE_CLIENT_ID = '2009984025';
+const LINE_REDIRECT_URI = 'https://pondd180242.github.io/worldcup2026';
+
+const TEAMS = [
+  {g:'A',n:'เม็กซิโก',f:'🇲🇽',e:'Mexico'},{g:'A',n:'แอฟริกาใต้',f:'🇿🇦',e:'South Africa'},{g:'A',n:'เกาหลีใต้',f:'🇰🇷',e:'South Korea'},{g:'A',n:'เชเกีย',f:'🇨🇿',e:'Czechia'},
+  {g:'B',n:'แคนาดา',f:'🇨🇦',e:'Canada'},{g:'B',n:'บอสเนียฯ',f:'🇧🇦',e:'Bosnia'},{g:'B',n:'กาตาร์',f:'🇶🇦',e:'Qatar'},{g:'B',n:'สวิตเซอร์แลนด์',f:'🇨🇭',e:'Switzerland'},
+  {g:'C',n:'บราซิล',f:'🇧🇷',e:'Brazil'},{g:'C',n:'โมร็อกโก',f:'🇲🇦',e:'Morocco'},{g:'C',n:'เฮติ',f:'🇭🇹',e:'Haiti'},{g:'C',n:'สกอตแลนด์',f:'🏴󠁧󠁢󠁳󠁣󠁴󠁿',e:'Scotland'},
+  {g:'D',n:'สหรัฐอเมริกา',f:'🇺🇸',e:'USA'},{g:'D',n:'ปารากวัย',f:'🇵🇾',e:'Paraguay'},{g:'D',n:'ออสเตรเลีย',f:'🇦🇺',e:'Australia'},{g:'D',n:'ตุรกี',f:'🇹🇷',e:'Türkiye'},
+  {g:'E',n:'เยอรมนี',f:'🇩🇪',e:'Germany'},{g:'E',n:'กือราเซา',f:'🇨🇼',e:'Curaçao'},{g:'E',n:'ไอวอรี่โคสต์',f:'🇨🇮',e:'Ivory Coast'},{g:'E',n:'เอกวาดอร์',f:'🇪🇨',e:'Ecuador'},
+  {g:'F',n:'เนเธอร์แลนด์',f:'🇳🇱',e:'Netherlands'},{g:'F',n:'ญี่ปุ่น',f:'🇯🇵',e:'Japan'},{g:'F',n:'สวีเดน',f:'🇸🇪',e:'Sweden'},{g:'F',n:'ตูนิเซีย',f:'🇹🇳',e:'Tunisia'},
+  {g:'G',n:'เบลเยียม',f:'🇧🇪',e:'Belgium'},{g:'G',n:'อียิปต์',f:'🇪🇬',e:'Egypt'},{g:'G',n:'อิหร่าน',f:'🇮🇷',e:'Iran'},{g:'G',n:'นิวซีแลนด์',f:'🇳🇿',e:'New Zealand'},
+  {g:'H',n:'สเปน',f:'🇪🇸',e:'Spain'},{g:'H',n:'เคปเวิร์ด',f:'🇨🇻',e:'Cape Verde'},{g:'H',n:'ซาอุดีอาระเบีย',f:'🇸🇦',e:'Saudi Arabia'},{g:'H',n:'อุรุกวัย',f:'🇺🇾',e:'Uruguay'},
+  {g:'I',n:'ฝรั่งเศส',f:'🇫🇷',e:'France'},{g:'I',n:'เซเนกัล',f:'🇸🇳',e:'Senegal'},{g:'I',n:'นอร์เวย์',f:'🇳🇴',e:'Norway'},{g:'I',n:'อิรัก',f:'🇮🇶',e:'Iraq'},
+  {g:'J',n:'อาร์เจนตินา',f:'🇦🇷',e:'Argentina'},{g:'J',n:'แอลจีเรีย',f:'🇩🇿',e:'Algeria'},{g:'J',n:'ออสเตรีย',f:'🇦🇹',e:'Austria'},{g:'J',n:'จอร์แดน',f:'🇯🇴',e:'Jordan'},
+  {g:'K',n:'โปรตุเกส',f:'🇵🇹',e:'Portugal'},{g:'K',n:'DR คองโก',f:'🇨🇩',e:'DR Congo'},{g:'K',n:'อุซเบกิสถาน',f:'🇺🇿',e:'Uzbekistan'},{g:'K',n:'โคลอมเบีย',f:'🇨🇴',e:'Colombia'},
+  {g:'L',n:'อังกฤษ',f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',e:'England'},{g:'L',n:'โครเอเชีย',f:'🇭🇷',e:'Croatia'},{g:'L',n:'กาน่า',f:'🇬🇭',e:'Ghana'},{g:'L',n:'ปานามา',f:'🇵🇦',e:'Panama'},
+];
+
+// STATE
+let myUser=null, roomCode='', mySelection=null, confirmedTeam=null, roomData={}, unsubscribe=null, currentGame=null;
+let speedInterval=null, speedMyCount=0, speedRunning=false;
+let clockInterval=null, clockStart=null, clockRunning=false, clockStopped=false;
+
+// TOAST
+window.toast=(msg,dur=2800)=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);};
+
+// LINE LOGIN
+window.loginWithLine=()=>{
+  const state='baan_'+Math.random().toString(36).slice(2);
+  sessionStorage.setItem('ls',state);
+  const p=new URLSearchParams(window.location.search);
+  if(p.get('room')) sessionStorage.setItem('pr',p.get('room'));
+  const u=new URL('https://access.line.me/oauth2/v2.1/authorize');
+  u.searchParams.set('response_type','code');u.searchParams.set('client_id',LINE_CLIENT_ID);
+  u.searchParams.set('redirect_uri',LINE_REDIRECT_URI);u.searchParams.set('state',state);u.searchParams.set('scope','profile openid');
+  window.location.href=u.toString();
+};
+async function handleLineCallback(code){
+  toast('🔄 กำลัง Login...');
+  try{
+    const p=new URLSearchParams();p.append('grant_type','authorization_code');p.append('code',code);p.append('redirect_uri',LINE_REDIRECT_URI);p.append('client_id',LINE_CLIENT_ID);p.append('client_secret','71038c410e10987c82de935be67ae40d');
+    const res=await fetch('https://api.line.me/oauth2/v2.1/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p});
+    const data=await res.json();
+    if(data.access_token){
+      const pr=await fetch('https://api.line.me/v2/profile',{headers:{'Authorization':'Bearer '+data.access_token}});
+      const prof=await pr.json();
+      myUser={uid:prof.userId,name:prof.displayName,avatar:prof.pictureUrl||''};
+      localStorage.setItem('lu',JSON.stringify(myUser));showApp();
+    }else toast('❌ Login ไม่สำเร็จ');
+  }catch(e){toast('❌ Error: '+e.message);}
+  window.history.replaceState({},'',(LINE_REDIRECT_URI));
+}
+function showApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('mainApp').style.display='block';
+  document.getElementById('userName').textContent=myUser.name;
+  document.getElementById('userAvatar').src=myUser.avatar||'';
+  const p=new URLSearchParams(window.location.search);
+  const room=p.get('room')||sessionStorage.getItem('pr');
+  sessionStorage.removeItem('pr');
+  if(room){document.getElementById('roomInput').value=room.toUpperCase();joinRoom();}
+}
+window.logout=()=>{localStorage.removeItem('lu');myUser=null;roomCode='';mySelection=null;confirmedTeam=null;if(unsubscribe)unsubscribe();clearInterval(speedInterval);clearInterval(clockInterval);document.getElementById('loginScreen').style.display='flex';document.getElementById('mainApp').style.display='none';};
+
+// TABS
+window.switchTab=(tab)=>{
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn')[{pick:0,results:1,games:2}[tab]].classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='games') updateGameInfo();
+};
+
+// ROOM
+const genCode=()=>Math.random().toString(36).toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6).padEnd(6,'X');
+window.createRoom=async()=>{if(!myUser)return;roomCode=genCode();await set(ref(db,'rooms/'+roomCode),{members:{},gs:{}});await initRoom();};
+window.joinRoom=async()=>{if(!myUser)return;const c=document.getElementById('roomInput').value.trim().toUpperCase();if(c.length<6){toast('⚠️ รหัสต้อง 6 ตัว');return;}roomCode=c;await initRoom();};
+async function initRoom(){
+  await update(ref(db,'rooms/'+roomCode+'/members/'+myUser.uid),{uid:myUser.uid,name:myUser.name,avatar:myUser.avatar,team:null});
+  if(unsubscribe)unsubscribe();
+  unsubscribe=onValue(ref(db,'rooms/'+roomCode),snap=>{roomData=snap.val()||{};renderAll();if(currentGame)updateGameUI();});
+  document.getElementById('setup-area').style.display='none';
+  document.getElementById('room-info-area').style.display='block';
+  document.getElementById('team-selector').style.display='block';
+  document.getElementById('roomCodeDisplay').textContent=roomCode;
+  const link=LINE_REDIRECT_URI+'?room='+roomCode;
+  document.getElementById('shareLinkEl').textContent=link;document.getElementById('shareLinkEl').dataset.link=link;
+  toast('✅ เข้าห้อง '+roomCode+' แล้ว!');
+}
+window.copyLink=()=>{const l=document.getElementById('shareLinkEl').dataset.link;navigator.clipboard?.writeText(l).then(()=>toast('📋 คัดลอกแล้ว!'));};
+window.resetRoom=async()=>{if(!roomCode||!confirm('รีเซ็ตทั้งหมด?'))return;await set(ref(db,'rooms/'+roomCode),{members:{},gs:{}});await update(ref(db,'rooms/'+roomCode+'/members/'+myUser.uid),{uid:myUser.uid,name:myUser.name,avatar:myUser.avatar,team:null});mySelection=null;confirmedTeam=null;toast('🔄 รีเซ็ตแล้ว!');};
+
+// HELPERS
+function getConflicts(members){const m={};Object.values(members).forEach(mb=>{if(mb.team){if(!m[mb.team])m[mb.team]=[];m[mb.team].push(mb);}});return Object.entries(m).filter(([,mb])=>mb.length>1).map(([team,mb])=>({team,members:mb}));}
+function getMyConflict(){return getConflicts(roomData.members||{}).find(c=>c.members.some(m=>m.uid===myUser?.uid));}
+function td(en){return TEAMS.find(t=>t.e===en);}
+
+// RENDER ALL
+function renderAll(){
+  const members=roomData.members||{};
+  const conflicts=getConflicts(members);
+  const cTeams=new Set(conflicts.map(c=>c.team));
+  document.getElementById('memberCount').textContent=Object.keys(members).length;
+  document.getElementById('membersList').innerHTML=Object.values(members).map(m=>{
+    const ht=!!m.team,ic=ht&&cTeams.has(m.team);
+    const t=ht?TEAMS.find(x=>x.e===m.team):null;
+    return `<div class="member-chip ${ht?'has-team':''} ${ic?'conflict':''}">${m.avatar?`<img src="${m.avatar}" alt="">`:''}${ic?'⚠️':ht?'✅':'⏳'} ${m.name}${t?` <span>${t.f}</span>`:''}</div>`;
+  }).join('');
+  const myC=getMyConflict();
+  if(myC){const t=TEAMS.find(x=>x.e===myC.team);const oth=myC.members.filter(m=>m.uid!==myUser.uid).map(m=>m.name).join(', ');document.getElementById('conflict-area').style.display='block';document.getElementById('conflictMsg').textContent=`คุณและ ${oth} ต่างเลือก ${t?t.f+' ':''} ${myC.team}`;}
+  else document.getElementById('conflict-area').style.display='none';
+  renderTeams(members,cTeams);renderResults(members,conflicts);updateGameInfo();
+}
+
+function renderTeams(members,cTeams){
+  const tm={};Object.values(members).forEach(m=>{if(m.team){if(!tm[m.team])tm[m.team]=[];tm[m.team].push(m);}});
+  const groups=[...new Set(TEAMS.map(t=>t.g))];
+  document.getElementById('groups-container').innerHTML=groups.map(g=>`
+    <div class="group-header"><span class="group-label">กลุ่ม ${g}</span><div class="group-line"></div></div>
+    <div class="teams-grid">${TEAMS.filter(t=>t.g===g).map(t=>{
+      const takers=tm[t.e]||[],isMine=takers.some(m=>m.uid===myUser.uid),byOth=takers.filter(m=>m.uid!==myUser.uid);
+      const isTaken=byOth.length>0&&!isMine,isConflict=isMine&&cTeams.has(t.e);
+      const isSel=mySelection===t.e&&!confirmedTeam,isConf=confirmedTeam===t.e;
+      let cls='team-card';if(isSel||isConf)cls+=' selected';if(isTaken)cls+=' taken';if(isConflict)cls+=' conflict-team';
+      const picks=takers.length>0?`<div class="team-pickers">${takers.map(m=>m.avatar?`<img class="picker-av" src="${m.avatar}" title="${m.name}">`:``).join('')}<span class="picker-names">${takers.map(m=>m.name).join(', ')}</span></div>`:'';
+      return `<div class="${cls}" onclick="${!isTaken?`selectTeam('${t.e}')`:''}" ><span class="team-flag">${t.f}</span><div class="team-info"><div class="team-name">${t.n}</div><div class="team-sub">กลุ่ม ${t.g}</div>${isConflict?`<div class="team-sub" style="color:var(--red)">⚠️ ซ้ำ!</div>`:''}${isMine&&isConf&&!isConflict?`<div class="team-sub" style="color:var(--green)">✅ ทีมคุณ</div>`:''}${picks}</div>${isSel||isConf?'<span class="check-icon">✓</span>':''}</div>`;
+    }).join('')}</div>`).join('');
+  renderSummary(tm,cTeams);
+}
+
+function renderSummary(tm,cTeams){
+  const entries=Object.entries(tm);const panel=document.getElementById('summary-panel');
+  if(!entries.length){panel.style.display='none';return;}panel.style.display='block';
+  document.getElementById('summary-grid').innerHTML=entries.map(([en,takers])=>{
+    const t=TEAMS.find(x=>x.e===en),isMine=takers.some(m=>m.uid===myUser.uid),isClash=cTeams.has(en);
+    return `<div class="sum-item ${isMine&&!isClash?'mine':''} ${isClash?'clash':''}"><span class="sum-flag">${t?t.f:'🏳️'}</span><div class="sum-info"><div class="sum-team">${t?t.n:en} ${isClash?'⚠️':''}</div>${takers.map(m=>`<div class="sum-picker">${m.avatar?`<img src="${m.avatar}" alt="">`:'<span>👤</span>'}<span>${m.name}${m.uid===myUser.uid?' (คุณ)':''}</span></div>`).join('')}</div></div>`;
+  }).join('');
+}
+
+function renderResults(members,conflicts){
+  const cTeams=new Set(conflicts.map(c=>c.team));
+  const gs=roomData.gs||{};const allWins=[...Object.values(gs.rr||{}),...Object.values(gs.sr||{}),...Object.values(gs.cr||{})];
+  const confirmed=Object.values(members).filter(m=>m.team);const list=document.getElementById('results-list');
+  if(!confirmed.length){list.innerHTML='<div style="color:#555;text-align:center;padding:28px 0">ยังไม่มีการยืนยันทีม...</div>';return;}
+  list.innerHTML=confirmed.map(m=>{const t=TEAMS.find(x=>x.e===m.team),ic=cTeams.has(m.team),win=allWins.find(r=>r.uid===m.uid&&r.team===m.team);
+    return `<div class="result-item">${m.avatar?`<img src="${m.avatar}" alt="">`:'<span style="font-size:1.4rem">👤</span>'}<span style="font-size:1.4rem">${t?t.f:'🏳️'}</span><div style="flex:1"><div style="font-weight:700">${m.name}</div><div style="font-size:.83rem;color:#999">${t?t.n:m.team} ${ic?'⚠️':''}</div>${win?`<div style="font-size:.72rem;color:#666">🏆 ${win.game}</div>`:''}</div>${win?'<span style="color:var(--accent)">🏆</span>':''}</div>`;
+  }).join('');
+}
+
+// TEAM SELECT
+window.selectTeam=(en)=>{if(!roomCode||confirmedTeam)return;mySelection=en;document.getElementById('confirmBtn').style.display='inline-block';renderTeams(roomData.members||{},new Set(getConflicts(roomData.members||{}).map(c=>c.team)));};
+window.confirmTeam=async()=>{if(!mySelection)return;confirmedTeam=mySelection;await update(ref(db,'rooms/'+roomCode+'/members/'+myUser.uid),{team:confirmedTeam,confirmedAt:Date.now()});const t=TEAMS.find(x=>x.e===confirmedTeam);toast(`${t.f} ยืนยันแล้ว! เชียร์ ${t.n}!`);document.getElementById('confirmBtn').style.display='none';};
+
+// GAMES
+window.openGame=(game)=>{currentGame=game;document.getElementById('gameSelect').style.display='none';['RPS','Speed','Clock'].forEach(g=>document.getElementById('game'+g).style.display='none');document.getElementById('game'+game[0].toUpperCase()+game.slice(1)).style.display='block';updateGameUI();};
+window.closeGame=()=>{currentGame=null;clearInterval(speedInterval);clearInterval(clockInterval);speedRunning=false;clockRunning=false;clockStopped=false;document.getElementById('gameSelect').style.display='block';['gameRPS','gameSpeed','gameClock'].forEach(id=>document.getElementById(id).style.display='none');};
+function updateGameInfo(){if(!myUser)return;const myC=getMyConflict();const t=myC?TEAMS.find(x=>x.e===myC.team):null;document.getElementById('gameConflictInfo').textContent=myC?`ทีมซ้ำ: ${t?t.f+' ':''} ${myC.team} — แข่งกับ ${myC.members.filter(m=>m.uid!==myUser.uid).map(m=>m.name).join(', ')}`:(roomCode?'ไม่มีทีมซ้ำ ✅':'เข้าห้องและเลือกทีมให้ซ้ำกับเพื่อนก่อน');}
+function updateGameUI(){if(!currentGame||!myUser)return;if(currentGame==='rps')updateRPS();if(currentGame==='speed')updateSpeed();if(currentGame==='clock')updateClock();}
+
+// ===== RPS =====
+const RE={rock:'✊',paper:'🖐',scissors:'✌️'},RN={rock:'กำปั้น',paper:'กระดาษ',scissors:'กรรไกร'},RW={rock:'scissors',paper:'rock',scissors:'paper'};
+function updateRPS(){
+  const myC=getMyConflict();if(!myC){document.getElementById('rpsConflictInfo').textContent='ไม่มีทีมซ้ำ ✅';document.getElementById('rpsStatus').textContent='ไม่จำเป็นต้องเล่น';['rpsRock','rpsPaper','rpsScissors'].forEach(id=>document.getElementById(id).disabled=true);return;}
+  const t=TEAMS.find(x=>x.e===myC.team),opp=myC.members.find(m=>m.uid!==myUser.uid);
+  document.getElementById('rpsConflictInfo').textContent=`${t?t.f+' '+t.n:myC.team} — คุณ vs ${opp?.name}`;
+  const rs=(roomData.gs||{}).rs||{};
+  document.getElementById('rpsPlayers').innerHTML=myC.members.map(m=>`<div class="gp-chip ${rs[m.uid]?'ready':''}">${m.avatar?`<img src="${m.avatar}" alt="">`:''}${m.name} ${rs[m.uid]?'✅':'⏳'}</div>`).join('');
+  const myMove=rs[myUser.uid],allMoved=myC.members.every(m=>rs[m.uid]);
+  if(allMoved){document.getElementById('rpsStatus').textContent='🎯 ผลการเป่า!';['rpsRock','rpsPaper','rpsScissors'].forEach(id=>document.getElementById(id).disabled=true);document.getElementById('rpsWaiting').style.display='none';showRPSResult(myC,rs);}
+  else if(myMove){document.getElementById('rpsStatus').textContent=`คุณเลือก ${RE[myMove]} แล้ว — รออีกฝ่าย...`;document.getElementById('rpsWaiting').style.display='block';['rpsRock','rpsPaper','rpsScissors'].forEach(id=>document.getElementById(id).disabled=true);document.getElementById('rps'+myMove[0].toUpperCase()+myMove.slice(1)).classList.add('chosen');}
+  else{document.getElementById('rpsStatus').textContent='เลือกมือของคุณ!';document.getElementById('rpsWaiting').style.display='none';['rpsRock','rpsPaper','rpsScissors'].forEach(id=>{const el=document.getElementById(id);el.disabled=false;el.classList.remove('chosen');});document.getElementById('rpsResultArea').innerHTML='';document.getElementById('rpsPlayAgain').style.display='none';}
+}
+window.chooseRPS=async(c)=>{if(!roomCode)return;await update(ref(db,'rooms/'+roomCode+'/gs/rs'),{[myUser.uid]:c});toast(`${RE[c]} เลือก ${RN[c]}!`);};
+async function showRPSResult(conflict,rs){
+  const opp=conflict.members.find(m=>m.uid!==myUser.uid);
+  const mm=rs[myUser.uid],om=rs[opp.uid];const t=TEAMS.find(x=>x.e===conflict.team);
+  let out,wuid,wname;
+  if(mm===om)out='draw';else if(RW[mm]===om){out='win';wuid=myUser.uid;wname=myUser.name;}else{out='lose';wuid=opp.uid;wname=opp.name;}
+  let html=`<div class="vs-display"><div class="player-choice"><span class="ce">${RE[mm]}</span><div class="cn">${myUser.name}</div></div><span class="vs-text">VS</span><div class="player-choice"><span class="ce">${RE[om]}</span><div class="cn">${opp.name}</div></div></div>`;
+  if(out==='draw'){html+=`<div class="game-result draw"><span class="gr-emoji">🤝</span><h3 style="color:var(--gold)">เสมอ! เล่นใหม่!</h3></div>`;document.getElementById('rpsPlayAgain').style.display='block';}
+  else{const w=out==='win';html+=`<div class="game-result ${out}"><span class="gr-emoji">${w?'🏆':'😢'}</span><h3 style="color:${w?'var(--green)':'var(--red)'}">${w?'🎉 คุณชนะ!':'😢 คุณแพ้'}</h3><p style="color:#999">${wname} ได้สิทธิ์เชียร์ ${t?t.f+' '+t.n:conflict.team}!</p></div>`;await recordWin(wuid,wname,conflict,'เป่ายิงฉุบ','rr');}
+  document.getElementById('rpsResultArea').innerHTML=html;
+}
+
+// ===== SPEED CLICK =====
+function updateSpeed(){
+  const myC=getMyConflict();if(!myC){document.getElementById('speedConflictInfo').textContent='ไม่มีทีมซ้ำ ✅';document.getElementById('speedStatus').textContent='ไม่จำเป็น';document.getElementById('speedReadyBtn').style.display='none';return;}
+  const t=TEAMS.find(x=>x.e===myC.team),opp=myC.members.find(m=>m.uid!==myUser.uid);
+  document.getElementById('speedConflictInfo').textContent=`${t?t.f+' '+t.n:myC.team} — คุณ vs ${opp?.name}`;
+  const sp=(roomData.gs||{}).sp||{};
+  const mr=sp['r_'+myUser.uid],or=opp&&sp['r_'+opp.uid],started=sp.started,ended=sp.ended;
+  document.getElementById('speedPlayers').innerHTML=myC.members.map(m=>`<div class="gp-chip ${sp['r_'+m.uid]?'ready':''}">${m.avatar?`<img src="${m.avatar}" alt="">`:''}${m.name} ${sp['r_'+m.uid]?'✅':'⏳'}</div>`).join('');
+  const ms=sp['s_'+myUser.uid]||0,os=opp?(sp['s_'+opp.uid]||0):0;
+  document.getElementById('speedScoreRow').innerHTML=`<div class="speed-score-box mine"><div class="sc-name">${myUser.name} (คุณ)</div><div class="sc-num">${ms}</div></div><div class="speed-score-box"><div class="sc-name">${opp?opp.name:'...'}</div><div class="sc-num">${os}</div></div>`;
+  if(ended&&!speedRunning){showSpeedResult(myC,sp);document.getElementById('speedReadyBtn').style.display='none';document.getElementById('speedTapBtn').disabled=true;}
+  else if(started&&!ended&&!speedRunning){startSpeedGame(myC,sp);}
+  else if(!started){
+    document.getElementById('speedStatus').textContent=mr?'รออีกฝ่ายพร้อม...':'กด "ฉันพร้อมแล้ว!" เพื่อเริ่ม';
+    document.getElementById('speedReadyBtn').style.display=mr?'none':'inline-block';
+    document.getElementById('speedTapBtn').disabled=true;document.getElementById('speedTimer').textContent='';document.getElementById('speedResultArea').innerHTML='';document.getElementById('speedPlayAgain').style.display='none';
+    if(mr&&or&&!started)startSpeedCountdown(myC);
+  }
+}
+window.speedReady=async()=>{if(!roomCode)return;await update(ref(db,'rooms/'+roomCode+'/gs/sp'),{['r_'+myUser.uid]:true});document.getElementById('speedReadyBtn').style.display='none';document.getElementById('speedStatus').textContent='รออีกฝ่ายพร้อม...';};
+async function startSpeedCountdown(conflict){const st=Date.now()+3500;await update(ref(db,'rooms/'+roomCode+'/gs/sp'),{cd:st});runSpeedCD(st);}
+function runSpeedCD(st){let iv=setInterval(()=>{const r=Math.ceil((st-Date.now())/1000);if(r>0)document.getElementById('speedTimer').textContent=r+'...';else{clearInterval(iv);document.getElementById('speedTimer').textContent='';update(ref(db,'rooms/'+roomCode+'/gs/sp'),{started:true,startTime:Date.now()});}},200);}
+function startSpeedGame(conflict,sp){if(speedRunning)return;speedRunning=true;speedMyCount=0;document.getElementById('speedTapBtn').disabled=false;document.getElementById('speedStatus').textContent='⚡ กดเร็วๆ!';const end=(sp.startTime||Date.now())+5000;
+  speedInterval=setInterval(async()=>{const r=Math.max(0,(end-Date.now())/1000);document.getElementById('speedTimer').textContent=r.toFixed(1)+'s';if(r<=0){clearInterval(speedInterval);speedRunning=false;document.getElementById('speedTapBtn').disabled=true;document.getElementById('speedTimer').textContent='⏰ หมดเวลา!';await update(ref(db,'rooms/'+roomCode+'/gs/sp'),{ended:true,['s_'+myUser.uid]:speedMyCount});}},100);}
+window.speedTap=async()=>{if(!speedRunning)return;speedMyCount++;await update(ref(db,'rooms/'+roomCode+'/gs/sp'),{['s_'+myUser.uid]:speedMyCount});};
+async function showSpeedResult(conflict,sp){
+  const opp=conflict.members.find(m=>m.uid!==myUser.uid);
+  const ms=sp['s_'+myUser.uid]||0,os=opp?(sp['s_'+opp.uid]||0):0;const t=TEAMS.find(x=>x.e===conflict.team);
+  let out,wuid,wname;
+  if(ms===os)out='draw';else if(ms>os){out='win';wuid=myUser.uid;wname=myUser.name;}else{out='lose';wuid=opp.uid;wname=opp.name;}
+  let html='';
+  if(out==='draw'){html=`<div class="game-result draw"><span class="gr-emoji">🤝</span><h3 style="color:var(--gold)">เสมอ! (${ms} vs ${os})</h3><p style="color:#999">เล่นใหม่!</p></div>`;document.getElementById('speedPlayAgain').style.display='block';}
+  else{const w=out==='win';html=`<div class="game-result ${out}"><span class="gr-emoji">${w?'🏆':'😢'}</span><h3 style="color:${w?'var(--green)':'var(--red)'}">${w?'🎉 คุณชนะ!':'😢 คุณแพ้'}</h3><p style="color:#999">${myUser.name}: ${ms} ครั้ง vs ${opp?.name}: ${os} ครั้ง</p><p style="color:#999;margin-top:6px">${wname} ได้สิทธิ์เชียร์ ${t?t.f+' '+t.n:conflict.team}!</p></div>`;await recordWin(wuid,wname,conflict,'กดปุ่มให้เร็ว','sr');}
+  document.getElementById('speedResultArea').innerHTML=html;document.getElementById('speedStatus').textContent='จบแล้ว!';
+}
+
+// ===== STOP THE CLOCK =====
+function updateClock(){
+  const myC=getMyConflict();if(!myC){document.getElementById('clockConflictInfo').textContent='ไม่มีทีมซ้ำ ✅';document.getElementById('clockStatus').textContent='ไม่จำเป็น';document.getElementById('clockReadyBtn').style.display='none';return;}
+  const t=TEAMS.find(x=>x.e===myC.team),opp=myC.members.find(m=>m.uid!==myUser.uid);
+  document.getElementById('clockConflictInfo').textContent=`${t?t.f+' '+t.n:myC.team} — คุณ vs ${opp?.name}`;
+  const cl=(roomData.gs||{}).cl||{};
+  const mr=cl['r_'+myUser.uid],or=opp&&cl['r_'+opp.uid];
+  document.getElementById('clockPlayers').innerHTML=myC.members.map(m=>`<div class="gp-chip ${cl['st_'+m.uid]!==undefined?'ready':''}">${m.avatar?`<img src="${m.avatar}" alt="">`:''}${m.name} ${cl['st_'+m.uid]!==undefined?'⏹️':''}</div>`).join('');
+  const allStopped=myC.members.every(m=>cl['st_'+m.uid]!==undefined);
+  if(allStopped&&!clockRunning){showClockResult(myC,cl);document.getElementById('clockReadyBtn').style.display='none';document.getElementById('clockStopBtn').disabled=true;}
+  else if(cl.started&&!clockRunning&&!clockStopped){startClockGame(cl);}
+  else if(!cl.started){
+    document.getElementById('clockStatus').textContent=mr?'รออีกฝ่ายพร้อม...':'กด "ฉันพร้อมแล้ว!" เพื่อเริ่ม';
+    document.getElementById('clockReadyBtn').style.display=mr?'none':'inline-block';
+    document.getElementById('clockStopBtn').disabled=true;document.getElementById('clockResultRow').innerHTML='';document.getElementById('clockResultArea').innerHTML='';document.getElementById('clockPlayAgain').style.display='none';
+    if(mr&&or&&!cl.started)startClockCountdown(myC);
+  }
+}
+window.clockReady=async()=>{if(!roomCode)return;await update(ref(db,'rooms/'+roomCode+'/gs/cl'),{['r_'+myUser.uid]:true});document.getElementById('clockReadyBtn').style.display='none';document.getElementById('clockStatus').textContent='รออีกฝ่ายพร้อม...';};
+async function startClockCountdown(conflict){const st=Date.now()+3500;await update(ref(db,'rooms/'+roomCode+'/gs/cl'),{cd:st});let iv=setInterval(()=>{const r=Math.ceil((st-Date.now())/1000);if(r>0)document.getElementById('clockStatus').textContent=`เริ่มใน ${r}...`;else{clearInterval(iv);update(ref(db,'rooms/'+roomCode+'/gs/cl'),{started:true,startTime:Date.now()});}},200);}
+function startClockGame(cl){if(clockRunning)return;clockRunning=true;clockStopped=false;clockStart=cl.startTime||Date.now();document.getElementById('clockStopBtn').disabled=false;document.getElementById('clockStatus').textContent='⏱️ กดหยุดเมื่อถึง 5.00 วินาที!';
+  clockInterval=setInterval(async()=>{const e=(Date.now()-clockStart)/1000;document.getElementById('clockBar').style.width=Math.min(e/10,1)*100+'%';document.getElementById('clockTimeDisplay').textContent=e.toFixed(2);if(e>=10){clearInterval(clockInterval);clockRunning=false;document.getElementById('clockStopBtn').disabled=true;if(!clockStopped){await update(ref(db,'rooms/'+roomCode+'/gs/cl'),{['st_'+myUser.uid]:e.toFixed(3)});clockStopped=true;}}},50);}
+window.clockStop=async()=>{if(!clockRunning||clockStopped)return;clearInterval(clockInterval);clockRunning=false;clockStopped=true;const e=((Date.now()-clockStart)/1000);document.getElementById('clockStopBtn').disabled=true;document.getElementById('clockStatus').textContent=`คุณหยุดที่ ${e.toFixed(2)}s รอผลอีกฝ่าย...`;await update(ref(db,'rooms/'+roomCode+'/gs/cl'),{['st_'+myUser.uid]:e.toFixed(3)});};
+async function showClockResult(conflict,cl){
+  const TARGET=5.0,opp=conflict.members.find(m=>m.uid!==myUser.uid);
+  const mt=parseFloat(cl['st_'+myUser.uid]||0),ot=opp?parseFloat(cl['st_'+opp.uid]||0):999;
+  const md=Math.abs(mt-TARGET),od=Math.abs(ot-TARGET);const t=TEAMS.find(x=>x.e===conflict.team);
+  let out,wuid,wname;
+  if(Math.abs(md-od)<0.005)out='draw';else if(md<od){out='win';wuid=myUser.uid;wname=myUser.name;}else{out='lose';wuid=opp.uid;wname=opp.name;}
+  document.getElementById('clockResultRow').innerHTML=`
+    <div class="clock-result-box ${out==='win'?'winner-box':''}"><div class="cr-name">${myUser.name} (คุณ)</div><div class="cr-time" style="color:${out==='win'?'var(--green)':'var(--red)'}">${mt.toFixed(2)}s</div><div class="cr-diff">ห่าง ${md.toFixed(3)}s</div></div>
+    <div class="clock-result-box ${out==='lose'?'winner-box':''}"><div class="cr-name">${opp?.name}</div><div class="cr-time" style="color:${out==='lose'?'var(--green)':'var(--red)'}">${ot.toFixed(2)}s</div><div class="cr-diff">ห่าง ${od.toFixed(3)}s</div></div>`;
+  let html='';
+  if(out==='draw'){html=`<div class="game-result draw"><span class="gr-emoji">🤝</span><h3 style="color:var(--gold)">เสมอ! เล่นใหม่!</h3></div>`;document.getElementById('clockPlayAgain').style.display='block';}
+  else{const w=out==='win';html=`<div class="game-result ${out}"><span class="gr-emoji">${w?'🏆':'😢'}</span><h3 style="color:${w?'var(--green)':'var(--red)'}">${w?'🎉 คุณชนะ!':'😢 คุณแพ้'}</h3><p style="color:#999">${wname} แม่นกว่า! ได้สิทธิ์เชียร์ ${t?t.f+' '+t.n:conflict.team}!</p></div>`;await recordWin(wuid,wname,conflict,'หยุดตรงเวลา','cr');}
+  document.getElementById('clockResultArea').innerHTML=html;document.getElementById('clockStatus').textContent='จบแล้ว!';
+}
+
+// RECORD WIN
+async function recordWin(wuid,wname,conflict,gameName,key){
+  const gs=roomData.gs||{};const existing=Object.values(gs[key]||{}).find(r=>r.team===conflict.team);if(existing)return;
+  if(wuid===myUser.uid){
+    const res=gs[key]||{};res['r'+Date.now()]={uid:wuid,name:wname,team:conflict.team,game:gameName,at:Date.now()};
+    await update(ref(db,'rooms/'+roomCode+'/gs'),{[key]:res});
+    const updates={};conflict.members.forEach(m=>{if(m.uid!==wuid)updates['rooms/'+roomCode+'/members/'+m.uid+'/team']=null;});
+    if(Object.keys(updates).length)await update(ref(db),updates);
+  }
+}
+
+// RESET GAME
+window.resetGame=async(game)=>{
+  if(!roomCode)return;const myC=getMyConflict();if(!myC)return;
+  clearInterval(speedInterval);clearInterval(clockInterval);speedRunning=false;clockRunning=false;clockStopped=false;
+  if(game==='rps'){const u={};myC.members.forEach(m=>{u['rooms/'+roomCode+'/gs/rs/'+m.uid]=null;});await update(ref(db),u);document.getElementById('rpsResultArea').innerHTML='';document.getElementById('rpsPlayAgain').style.display='none';}
+  if(game==='speed'){await update(ref(db,'rooms/'+roomCode+'/gs'),{sp:null});speedMyCount=0;document.getElementById('speedResultArea').innerHTML='';document.getElementById('speedPlayAgain').style.display='none';document.getElementById('speedTimer').textContent='';document.getElementById('speedTapBtn').disabled=true;document.getElementById('speedReadyBtn').style.display='inline-block';}
+  if(game==='clock'){await update(ref(db,'rooms/'+roomCode+'/gs'),{cl:null});document.getElementById('clockResultArea').innerHTML='';document.getElementById('clockResultRow').innerHTML='';document.getElementById('clockPlayAgain').style.display='none';document.getElementById('clockBar').style.width='0%';document.getElementById('clockTimeDisplay').textContent='0.00';document.getElementById('clockStopBtn').disabled=true;document.getElementById('clockReadyBtn').style.display='inline-block';}
+  toast('🔄 รีเซ็ตแล้ว!');
+};
+
+// INIT
+window.addEventListener('load',async()=>{
+  const p=new URLSearchParams(window.location.search),code=p.get('code'),state=p.get('state');
+  const saved=localStorage.getItem('lu');
+  if(saved){myUser=JSON.parse(saved);showApp();return;}
+  if(code&&state){await handleLineCallback(code);return;}
+  document.getElementById('loginScreen').style.display='flex';
+});
+</script>
+</body>
+</html>
