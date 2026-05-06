@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚽ บ้านท้ายซอย - เลือกทีมบอลโลก 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Bebas+Neue&display=swap');
+  :root {
+    --gold:#FFD700;--gold2:#FFA500;--darker:#060b15;--card:#111827;--card2:#1a2540;
+    --accent:#00e5ff;--green:#00ff88;--red:#ff4466;--line:#06C755;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--darker);color:#eee;font-family:'Sarabun',sans-serif;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(0,229,255,.07) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(255,165,0,.07) 0%,transparent 50%);pointer-events:none;z-index:0;}
+  .container{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:20px;}
+
+  /* LOGIN SCREEN */
+  .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px;}
+  .login-box{background:var(--card);border:1px solid rgba(255,215,0,.15);border-radius:24px;padding:40px 36px;max-width:400px;width:100%;}
+  .login-box h1{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:4px;background:linear-gradient(135deg,var(--gold),var(--gold2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
+  .login-box p{color:#888;font-size:.95rem;margin-bottom:28px;}
+  .btn-line{display:flex;align-items:center;justify-content:center;gap:12px;background:var(--line);color:#fff;border:none;border-radius:14px;padding:16px 28px;font-family:'Sarabun',sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer;width:100%;transition:all .2s;}
+  .btn-line:hover{background:#05a847;transform:translateY(-2px);box-shadow:0 8px 24px rgba(6,199,85,.35);}
+  .btn-line svg{width:28px;height:28px;}
+  .login-note{color:#555;font-size:.78rem;margin-top:16px;}
+
+  /* USER BAR */
+  .user-bar{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:10px 16px;margin-bottom:16px;}
+  .user-avatar{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);object-fit:cover;}
+  .user-name{font-weight:700;font-size:.95rem;flex:1;}
+  .btn-logout{background:rgba(255,255,255,.07);border:none;border-radius:8px;padding:6px 12px;color:#888;font-family:'Sarabun',sans-serif;font-size:.8rem;cursor:pointer;}
+  .btn-logout:hover{background:rgba(255,68,102,.15);color:var(--red);}
+
+  /* TABS */
+  .tabs{display:flex;gap:8px;margin:16px 0;background:var(--card);padding:6px;border-radius:14px;border:1px solid rgba(255,255,255,.06);}
+  .tab-btn{flex:1;padding:10px;border:none;border-radius:10px;background:transparent;color:#888;font-family:'Sarabun',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .3s;}
+  .tab-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;}
+  .section{display:none;}.section.active{display:block;}
+
+  /* ROOM CARD */
+  .room-card{background:var(--card);border:1px solid rgba(255,215,0,.15);border-radius:20px;padding:24px;margin-bottom:20px;}
+  .room-card h2{font-size:1.2rem;color:var(--gold);margin-bottom:16px;}
+  .room-info{background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:16px;margin-top:12px;}
+  .room-code{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:8px;color:var(--gold);text-align:center;display:block;}
+  .room-link{background:var(--card2);border-radius:8px;padding:8px 12px;font-size:.8rem;color:var(--accent);word-break:break-all;margin-top:8px;cursor:pointer;text-align:center;}
+  .input-row{display:flex;gap:10px;flex-wrap:wrap;}
+  input[type="text"]{flex:1;min-width:180px;background:var(--card2);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;color:#fff;font-family:'Sarabun',sans-serif;font-size:1rem;outline:none;transition:border-color .3s;}
+  input[type="text"]:focus{border-color:var(--gold);}
+  input[type="text"]::placeholder{color:#555;}
+  .btn{padding:12px 20px;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+  .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;}
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,165,0,.4);}
+  .btn-accent{background:linear-gradient(135deg,var(--accent),#0099bb);color:#000;}
+  .btn-danger{background:rgba(255,68,102,.15);border:1px solid rgba(255,68,102,.3);color:var(--red);}
+  .btn-sm{padding:7px 14px;font-size:.82rem;}
+
+  /* MEMBERS */
+  .members-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .member-chip{background:var(--card2);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:5px 12px;font-size:.82rem;display:flex;align-items:center;gap:6px;}
+  .member-chip img{width:20px;height:20px;border-radius:50%;}
+  .member-chip.has-team{border-color:var(--green);background:rgba(0,255,136,.07);}
+  .member-chip.conflict{border-color:var(--red);background:rgba(255,68,102,.07);animation:pulse-red 1.5s infinite;}
+  @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(255,68,102,0)}50%{box-shadow:0 0 0 5px rgba(255,68,102,.12)}}
+
+  /* TEAMS */
+  .group-header{display:flex;align-items:center;gap:10px;margin:20px 0 10px;}
+  .group-label{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:2px;}
+  .group-line{flex:1;height:1px;background:rgba(255,215,0,.12);}
+  .teams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:9px;margin-bottom:8px;}
+  .team-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:11px 13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:9px;position:relative;overflow:hidden;}
+  .team-card:hover{border-color:var(--gold);transform:translateY(-1px);}
+  .team-card.selected{border-color:var(--green);background:rgba(0,255,136,.07);}
+  .team-card.taken{opacity:.4;cursor:not-allowed;}
+  .team-card.conflict-team{border-color:var(--red)!important;background:rgba(255,68,102,.09)!important;animation:pulse-red 1.5s infinite;}
+  .team-flag{font-size:1.5rem;line-height:1;}
+  .team-info{flex:1;min-width:0;}
+  .team-name{font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .team-sub{font-size:.68rem;color:#666;}
+  .check-icon{position:absolute;top:5px;right:7px;color:var(--green);font-size:.85rem;}
+
+  /* CONFLICT */
+  .conflict-banner{background:rgba(255,68,102,.08);border:1px solid rgba(255,68,102,.35);border-radius:16px;padding:18px;margin:14px 0;text-align:center;animation:pulse-border 2s infinite;}
+  @keyframes pulse-border{0%,100%{border-color:rgba(255,68,102,.35)}50%{border-color:rgba(255,68,102,.7)}}
+  .conflict-banner h3{color:var(--red);margin-bottom:6px;}
+
+  /* RPS */
+  .rps-room{background:var(--card);border:2px solid rgba(0,229,255,.25);border-radius:20px;padding:26px;margin-top:16px;}
+  .rps-room h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:3px;color:var(--accent);text-align:center;margin-bottom:4px;}
+  .rps-status{text-align:center;padding:10px;background:rgba(0,229,255,.06);border-radius:10px;margin:12px 0;color:var(--accent);font-weight:700;}
+  .rps-choices{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:14px 0;}
+  .rps-btn{width:86px;height:86px;border-radius:50%;border:2px solid rgba(255,255,255,.1);background:var(--card2);font-size:2.3rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+  .rps-btn span{font-size:.52rem;color:#888;margin-top:3px;font-family:'Sarabun',sans-serif;}
+  .rps-btn:hover{transform:scale(1.1);border-color:var(--accent);background:rgba(0,229,255,.09);}
+  .rps-btn.chosen{border-color:var(--gold);background:rgba(255,215,0,.1);}
+  .rps-btn:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+  .rps-result{text-align:center;padding:18px;border-radius:14px;margin-top:14px;}
+  .rps-result.win{background:rgba(0,255,136,.09);border:1px solid rgba(0,255,136,.25);}
+  .rps-result.lose{background:rgba(255,68,102,.09);border:1px solid rgba(255,68,102,.25);}
+  .rps-result.draw{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.18);}
+  .vs-display{display:flex;align-items:center;justify-content:center;gap:18px;margin:10px 0;flex-wrap:wrap;}
+  .player-choice{text-align:center;}
+  .player-choice .ce{font-size:2.8rem;display:block;}
+  .player-choice .cn{font-size:.78rem;color:#888;}
+  .vs-text{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#444;}
+
+  /* RESULTS */
+  .results-panel{background:var(--card);border:1px solid rgba(255,215,0,.13);border-radius:20px;padding:22px;margin-top:16px;}
+  .results-panel h2{color:var(--gold);margin-bottom:14px;}
+  .result-item{display:flex;align-items:center;gap:12px;padding:11px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:7px;border:1px solid rgba(255,255,255,.04);}
+  .result-item img{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.1);}
+
+  /* TOAST */
+  #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card2);border:1px solid rgba(255,215,0,.25);border-radius:12px;padding:11px 22px;color:#fff;font-size:.88rem;z-index:9999;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+  #toast.show{transform:translateX(-50%) translateY(0);}
+
+  .label{font-size:.78rem;color:#666;margin-bottom:5px;}
+  .divider{height:1px;background:rgba(255,255,255,.05);margin:14px 0;}
+  .mt-12{margin-top:12px;}.mt-16{margin-top:16px;}.text-center{text-align:center;}
+  .conn-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px;animation:blink 1.5s infinite;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  @media(max-width:480px){.teams-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr))}.rps-btn{width:74px;height:74px;font-size:2rem;}}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div style="font-size:2.8rem;margin-bottom:8px">🏆</div>
+    <h1>บ้านท้ายซอย</h1>
+    <p>เลือกทีมเชียร์บอลโลก 2026<br>Login ด้วย LINE เพื่อบันทึกสิทธิ์ของคุณ</p>
+    <button class="btn-line" onclick="loginWithLine()">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.63 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+      เข้าสู่ระบบด้วย LINE
+    </button>
+    <div class="login-note">ระบบจะดึงชื่อและรูปโปรไฟล์ LINE ของคุณ<br>เพื่อแสดงให้เพื่อนในกลุ่มเห็น</div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" style="display:none">
+<div class="container">
+  <div class="user-bar">
+    <img id="userAvatar" class="user-avatar" src="" alt="">
+    <span class="user-name" id="userName"></span>
+    <span><span class="conn-dot"></span><span style="font-size:.75rem;color:#666">Firebase</span></span>
+    <button class="btn-logout" onclick="logout()">ออกจากระบบ</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('pick')">⚽ เลือกทีม</button>
+    <button class="tab-btn" onclick="switchTab('results')">🏅 ผลการจับ</button>
+    <button class="tab-btn" onclick="switchTab('rps')">✌️ เป่ายิงฉุบ</button>
+  </div>
+
+  <!-- PICK TAB -->
+  <div id="tab-pick" class="section active">
+    <div class="room-card">
+      <h2>🏠 บ้านท้ายซอย</h2>
+      <div id="setup-area">
+        <div class="label">เข้าร่วมห้องที่มีอยู่</div>
+        <div class="input-row">
+          <input type="text" id="roomInput" placeholder="รหัส 6 ตัว..." maxlength="6" style="text-transform:uppercase;letter-spacing:4px;font-weight:700">
+          <button class="btn btn-accent" onclick="joinRoom()">เข้าร่วม</button>
+        </div>
+        <div class="divider"></div>
+        <div class="text-center">
+          <button class="btn btn-gold" onclick="createRoom()">✨ สร้างห้องใหม่</button>
+        </div>
+      </div>
+      <div id="room-info-area" style="display:none">
+        <div class="room-info">
+          <div class="label text-center">รหัสห้อง — แชร์ให้เพื่อน</div>
+          <span class="room-code" id="roomCodeDisplay"></span>
+          <div class="room-link" id="shareLinkEl" onclick="copyLink()">📋 คลิกเพื่อคัดลอกลิงค์...</div>
+        </div>
+        <div class="mt-12">
+          <div class="label">สมาชิกในห้อง (<span id="memberCount">0</span> คน)</div>
+          <div class="members-list" id="membersList"></div>
+        </div>
+        <div class="mt-12 text-center">
+          <button class="btn btn-danger btn-sm" onclick="resetRoom()">🗑️ รีเซ็ตห้อง</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="conflict-area" style="display:none" class="conflict-banner">
+      <h3>⚠️ ทีมเดียวกัน! ต้องเป่ายิงฉุบ</h3>
+      <p id="conflictMsg" style="color:#bbb;font-size:.9rem"></p>
+      <button class="btn btn-accent mt-12" onclick="goToRPS()">✌️ ไปเป่ายิงฉุบเลย!</button>
+    </div>
+
+    <div id="team-selector" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+        <div style="font-size:1.05rem;font-weight:700">เลือกทีมที่ต้องการเชียร์</div>
+        <button class="btn btn-gold btn-sm" id="confirmBtn" onclick="confirmTeam()" style="display:none">✅ ยืนยัน!</button>
+      </div>
+      <div id="groups-container"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS TAB -->
+  <div id="tab-results" class="section">
+    <div class="results-panel">
+      <h2>🏅 สรุปทีมที่ได้รับ</h2>
+      <div id="results-list"><div style="color:#555;text-align:center;padding:28px 0">ยังไม่มีการเลือกทีม...</div></div>
+    </div>
+  </div>
+
+  <!-- RPS TAB -->
+  <div id="tab-rps" class="section">
+    <div class="rps-room">
+      <h2>✊ เป่ายิงฉุบ ✌️</h2>
+      <div style="text-align:center;color:#888;font-size:.88rem;margin-bottom:12px" id="rpsInfo">เข้าร่วมห้องก่อนเพื่อเล่น</div>
+      <div class="rps-status" id="rpsStatus">รอเข้าห้อง...</div>
+      <div id="rpsConflictDetail" style="text-align:center;color:#888;font-size:.83rem;margin-bottom:10px"></div>
+      <div class="rps-choices">
+        <button class="rps-btn" id="rpsRock" onclick="chooseRPS('rock')">✊<span>กำปั้น</span></button>
+        <button class="rps-btn" id="rpsPaper" onclick="chooseRPS('paper')">🖐<span>กระดาษ</span></button>
+        <button class="rps-btn" id="rpsScissors" onclick="chooseRPS('scissors')">✌️<span>กรรไกร</span></button>
+      </div>
+      <div id="rpsWaiting" style="display:none;text-align:center;color:#888;font-size:.88rem;margin:8px 0">รอผู้เล่นอีกฝ่าย...</div>
+      <div id="rpsResultArea"></div>
+      <div class="text-center mt-12" id="rpsPlayAgainArea" style="display:none">
+        <button class="btn btn-gold" onclick="resetRPS()">🔄 เล่นอีกรอบ</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBzWUvd-2SFV6MIn5rvdnInSkcNpfOrcIw",
+  authDomain: "worldcup2026-65dcd.firebaseapp.com",
+  databaseURL: "https://worldcup2026-65dcd-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "worldcup2026-65dcd",
+  storageBucket: "worldcup2026-65dcd.firebasestorage.app",
+  messagingSenderId: "675191771950",
+  appId: "1:675191771950:web:70d1e50ce0403712b4a0bf"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// LINE CONFIG
+const LINE_CLIENT_ID = '2009984025';
+const LINE_REDIRECT_URI = 'https://pondd180242.github.io/worldcup2026';
+const LINE_STATE = 'baan_tai_soi_2026';
+
+// TEAMS
+const TEAMS = [
+  {group:'A',name:'เม็กซิโก',flag:'🇲🇽',en:'Mexico'},
+  {group:'A',name:'แอฟริกาใต้',flag:'🇿🇦',en:'South Africa'},
+  {group:'A',name:'เกาหลีใต้',flag:'🇰🇷',en:'South Korea'},
+  {group:'A',name:'เชเกีย',flag:'🇨🇿',en:'Czechia'},
+  {group:'B',name:'แคนาดา',flag:'🇨🇦',en:'Canada'},
+  {group:'B',name:'บอสเนียฯ',flag:'🇧🇦',en:'Bosnia & Herz.'},
+  {group:'B',name:'กาตาร์',flag:'🇶🇦',en:'Qatar'},
+  {group:'B',name:'สวิตเซอร์แลนด์',flag:'🇨🇭',en:'Switzerland'},
+  {group:'C',name:'บราซิล',flag:'🇧🇷',en:'Brazil'},
+  {group:'C',name:'โมร็อกโก',flag:'🇲🇦',en:'Morocco'},
+  {group:'C',name:'เฮติ',flag:'🇭🇹',en:'Haiti'},
+  {group:'C',name:'สกอตแลนด์',flag:'🏴󠁧󠁢󠁳󠁣󠁴󠁿',en:'Scotland'},
+  {group:'D',name:'สหรัฐอเมริกา',flag:'🇺🇸',en:'USA'},
+  {group:'D',name:'ปารากวัย',flag:'🇵🇾',en:'Paraguay'},
+  {group:'D',name:'ออสเตรเลีย',flag:'🇦🇺',en:'Australia'},
+  {group:'D',name:'ตุรกี',flag:'🇹🇷',en:'Türkiye'},
+  {group:'E',name:'เยอรมนี',flag:'🇩🇪',en:'Germany'},
+  {group:'E',name:'กือราเซา',flag:'🇨🇼',en:'Curaçao'},
+  {group:'E',name:'ไอวอรี่โคสต์',flag:'🇨🇮',en:'Ivory Coast'},
+  {group:'E',name:'เอกวาดอร์',flag:'🇪🇨',en:'Ecuador'},
+  {group:'F',name:'เนเธอร์แลนด์',flag:'🇳🇱',en:'Netherlands'},
+  {group:'F',name:'ญี่ปุ่น',flag:'🇯🇵',en:'Japan'},
+  {group:'F',name:'สวีเดน',flag:'🇸🇪',en:'Sweden'},
+  {group:'F',name:'ตูนิเซีย',flag:'🇹🇳',en:'Tunisia'},
+  {group:'G',name:'เบลเยียม',flag:'🇧🇪',en:'Belgium'},
+  {group:'G',name:'อียิปต์',flag:'🇪🇬',en:'Egypt'},
+  {group:'G',name:'อิหร่าน',flag:'🇮🇷',en:'Iran'},
+  {group:'G',name:'นิวซีแลนด์',flag:'🇳🇿',en:'New Zealand'},
+  {group:'H',name:'สเปน',flag:'🇪🇸',en:'Spain'},
+  {group:'H',name:'เคปเวิร์ด',flag:'🇨🇻',en:'Cape Verde'},
+  {group:'H',name:'ซาอุดีอาระเบีย',flag:'🇸🇦',en:'Saudi Arabia'},
+  {group:'H',name:'อุรุกวัย',flag:'🇺🇾',en:'Uruguay'},
+  {group:'I',name:'ฝรั่งเศส',flag:'🇫🇷',en:'France'},
+  {group:'I',name:'เซเนกัล',flag:'🇸🇳',en:'Senegal'},
+  {group:'I',name:'นอร์เวย์',flag:'🇳🇴',en:'Norway'},
+  {group:'I',name:'อิรัก',flag:'🇮🇶',en:'Iraq'},
+  {group:'J',name:'อาร์เจนตินา',flag:'🇦🇷',en:'Argentina'},
+  {group:'J',name:'แอลจีเรีย',flag:'🇩🇿',en:'Algeria'},
+  {group:'J',name:'ออสเตรีย',flag:'🇦🇹',en:'Austria'},
+  {group:'J',name:'จอร์แดน',flag:'🇯🇴',en:'Jordan'},
+  {group:'K',name:'โปรตุเกส',flag:'🇵🇹',en:'Portugal'},
+  {group:'K',name:'DR คองโก',flag:'🇨🇩',en:'DR Congo'},
+  {group:'K',name:'อุซเบกิสถาน',flag:'🇺🇿',en:'Uzbekistan'},
+  {group:'K',name:'โคลอมเบีย',flag:'🇨🇴',en:'Colombia'},
+  {group:'L',name:'อังกฤษ',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',en:'England'},
+  {group:'L',name:'โครเอเชีย',flag:'🇭🇷',en:'Croatia'},
+  {group:'L',name:'กาน่า',flag:'🇬🇭',en:'Ghana'},
+  {group:'L',name:'ปานามา',flag:'🇵🇦',en:'Panama'},
+];
+
+// STATE
+let myUser = null; // { uid, name, avatar }
+let roomCode = '';
+let mySelection = null;
+let confirmedTeam = null;
+let roomData = {};
+let unsubscribe = null;
+
+// ===== TOAST =====
+window.toast = (msg, dur=2800) => {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), dur);
+};
+
+// ===== LINE LOGIN =====
+window.loginWithLine = () => {
+  const state = LINE_STATE + '_' + Math.random().toString(36).slice(2);
+  sessionStorage.setItem('line_state', state);
+  // Save current room from URL
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('room')) sessionStorage.setItem('pending_room', params.get('room'));
+
+  const url = new URL('https://access.line.me/oauth2/v2.1/authorize');
+  url.searchParams.set('response_type','code');
+  url.searchParams.set('client_id', LINE_CLIENT_ID);
+  url.searchParams.set('redirect_uri', LINE_REDIRECT_URI);
+  url.searchParams.set('state', state);
+  url.searchParams.set('scope','profile openid');
+  window.location.href = url.toString();
+};
+
+async function handleLineCallback(code) {
+  toast('🔄 กำลัง Login...');
+  try {
+    // Exchange code for token via LINE token endpoint (CORS workaround: use proxy)
+    // Since we can't call LINE API directly from browser due to CORS,
+    // we'll use PKCE flow with id_token decode
+    const params = new URLSearchParams();
+    params.append('grant_type','authorization_code');
+    params.append('code', code);
+    params.append('redirect_uri', LINE_REDIRECT_URI);
+    params.append('client_id', LINE_CLIENT_ID);
+    params.append('client_secret', '71038c410e10987c82de935be67ae40d');
+
+    const res = await fetch('https://api.line.me/oauth2/v2.1/token', {
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body: params
+    });
+    const data = await res.json();
+
+    if (data.access_token) {
+      // Get profile
+      const profileRes = await fetch('https://api.line.me/v2/profile', {
+        headers:{'Authorization':'Bearer '+data.access_token}
+      });
+      const profile = await profileRes.json();
+      myUser = { uid: profile.userId, name: profile.displayName, avatar: profile.pictureUrl || '' };
+      localStorage.setItem('line_user', JSON.stringify(myUser));
+      showApp();
+    } else {
+      toast('❌ Login ไม่สำเร็จ ลองใหม่อีกครั้ง');
+    }
+  } catch(e) {
+    toast('❌ เกิดข้อผิดพลาด: ' + e.message);
+    console.error(e);
+  }
+  // Clean URL
+  window.history.replaceState({}, '', LINE_REDIRECT_URI);
+}
+
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  document.getElementById('userName').textContent = myUser.name;
+  document.getElementById('userAvatar').src = myUser.avatar || 'https://via.placeholder.com/36';
+
+  // Auto-join room from URL or pending
+  const params = new URLSearchParams(window.location.search);
+  const room = params.get('room') || sessionStorage.getItem('pending_room');
+  sessionStorage.removeItem('pending_room');
+  if (room) {
+    document.getElementById('roomInput').value = room.toUpperCase();
+    joinRoom();
+  }
+}
+
+window.logout = () => {
+  localStorage.removeItem('line_user');
+  myUser = null; roomCode = ''; mySelection = null; confirmedTeam = null;
+  if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('mainApp').style.display = 'none';
+};
+
+// ===== TABS =====
+window.switchTab = (tab) => {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const idx = {pick:0,results:1,rps:2}[tab];
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+};
+
+// ===== ROOM =====
+const genCode = () => Math.random().toString(36).toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6).padEnd(6,'X');
+
+window.createRoom = async () => {
+  if (!myUser) return;
+  roomCode = genCode();
+  await set(ref(db,'rooms/'+roomCode), { members:{}, rpsState:{}, rpsResults:[] });
+  await initRoom();
+};
+
+window.joinRoom = async () => {
+  if (!myUser) return;
+  const code = document.getElementById('roomInput').value.trim().toUpperCase();
+  if (code.length < 6) { toast('⚠️ รหัสห้องต้อง 6 ตัว'); return; }
+  roomCode = code;
+  await initRoom();
+};
+
+async function initRoom() {
+  // Add self to room
+  await update(ref(db,'rooms/'+roomCode+'/members/'+myUser.uid), {
+    uid: myUser.uid, name: myUser.name, avatar: myUser.avatar, team: null, confirmedAt: null
+  });
+
+  if (unsubscribe) unsubscribe();
+  unsubscribe = onValue(ref(db,'rooms/'+roomCode), snap => {
+    roomData = snap.val() || {};
+    renderAll();
+  });
+
+  document.getElementById('setup-area').style.display = 'none';
+  document.getElementById('room-info-area').style.display = 'block';
+  document.getElementById('team-selector').style.display = 'block';
+  document.getElementById('roomCodeDisplay').textContent = roomCode;
+
+  const link = LINE_REDIRECT_URI + '?room=' + roomCode;
+  document.getElementById('shareLinkEl').textContent = link;
+  document.getElementById('shareLinkEl').dataset.link = link;
+  toast('✅ เข้าห้อง ' + roomCode + ' แล้ว!');
+}
+
+window.copyLink = () => {
+  const link = document.getElementById('shareLinkEl').dataset.link;
+  navigator.clipboard?.writeText(link).then(()=>toast('📋 คัดลอกลิงค์แล้ว!')) || toast(link);
+};
+
+window.resetRoom = async () => {
+  if (!roomCode || !confirm('รีเซ็ตห้องทั้งหมดใช่ไหม?')) return;
+  await set(ref(db,'rooms/'+roomCode), { members:{}, rpsState:{}, rpsResults:[] });
+  await update(ref(db,'rooms/'+roomCode+'/members/'+myUser.uid), { uid:myUser.uid, name:myUser.name, avatar:myUser.avatar, team:null, confirmedAt:null });
+  mySelection=null; confirmedTeam=null;
+  toast('🔄 รีเซ็ตแล้ว!');
+};
+
+// ===== RENDER =====
+function getConflicts(members) {
+  const m = {};
+  Object.values(members).forEach(mb => { if(mb.team){if(!m[mb.team])m[mb.team]=[];m[mb.team].push(mb);} });
+  return Object.entries(m).filter(([,mb])=>mb.length>1).map(([team,mb])=>({team,members:mb}));
+}
+
+function renderAll() {
+  const members = roomData.members || {};
+  const conflicts = getConflicts(members);
+  const cTeams = new Set(conflicts.map(c=>c.team));
+
+  // Members list
+  document.getElementById('memberCount').textContent = Object.keys(members).length;
+  document.getElementById('membersList').innerHTML = Object.values(members).map(m => {
+    const hasTeam = !!m.team;
+    const isConflict = hasTeam && cTeams.has(m.team);
+    const td = hasTeam ? TEAMS.find(t=>t.en===m.team) : null;
+    return `<div class="member-chip ${hasTeam?'has-team':''} ${isConflict?'conflict':''}">
+      ${m.avatar ? `<img src="${m.avatar}" alt="">` : ''}
+      ${isConflict?'⚠️':hasTeam?'✅':'⏳'} ${m.name}
+      ${td?`<span>${td.flag}</span>`:''}
+    </div>`;
+  }).join('');
+
+  // Conflict banner
+  const myConflicts = conflicts.filter(c=>c.members.some(m=>m.uid===myUser.uid));
+  if (myConflicts.length > 0) {
+    const c = myConflicts[0];
+    const td = TEAMS.find(t=>t.en===c.team);
+    const others = c.members.filter(m=>m.uid!==myUser.uid).map(m=>m.name).join(', ');
+    document.getElementById('conflict-area').style.display = 'block';
+    document.getElementById('conflictMsg').textContent = `คุณและ ${others} ต่างเลือก ${td?td.flag+' ':''} ${c.team}`;
+  } else {
+    document.getElementById('conflict-area').style.display = 'none';
+  }
+
+  renderTeams(members, cTeams);
+  renderResults(members, conflicts);
+  updateRPSUI(members, conflicts);
+}
+
+function renderTeams(members, cTeams) {
+  const takenMap = {};
+  Object.values(members).forEach(m => { if(m.team){if(!takenMap[m.team])takenMap[m.team]=[];takenMap[m.team].push(m);} });
+  const groups = [...new Set(TEAMS.map(t=>t.group))];
+  document.getElementById('groups-container').innerHTML = groups.map(g => {
+    return `<div class="group-header"><span class="group-label">กลุ่ม ${g}</span><div class="group-line"></div></div>
+    <div class="teams-grid">${TEAMS.filter(t=>t.group===g).map(t => {
+      const takers = takenMap[t.en]||[];
+      const isMine = takers.some(m=>m.uid===myUser.uid);
+      const byOthers = takers.filter(m=>m.uid!==myUser.uid);
+      const isTaken = byOthers.length>0 && !isMine;
+      const isConflict = isMine && cTeams.has(t.en);
+      const isSelected = mySelection===t.en && !confirmedTeam;
+      const isConfirmed = confirmedTeam===t.en;
+      let cls = 'team-card';
+      if (isSelected||isConfirmed) cls+=' selected';
+      if (isTaken) cls+=' taken';
+      if (isConflict) cls+=' conflict-team';
+      return `<div class="${cls}" onclick="${!isTaken?`selectTeam('${t.en}')`:''}" >
+        <span class="team-flag">${t.flag}</span>
+        <div class="team-info">
+          <div class="team-name">${t.name}</div>
+          <div class="team-sub">กลุ่ม ${t.group}</div>
+          ${byOthers.length>0?`<div class="team-sub" style="color:var(--red)">⛔ ${byOthers.map(m=>m.name).join(', ')}</div>`:''}
+          ${isMine&&confirmedTeam?`<div class="team-sub" style="color:var(--green)">✅ ทีมของคุณ</div>`:''}
+          ${isConflict?`<div class="team-sub" style="color:var(--red)">⚠️ ซ้ำกับ ${byOthers.map(m=>m.name).join(', ')}</div>`:''}
+        </div>
+        ${(isSelected||isConfirmed)?'<span class="check-icon">✓</span>':''}
+      </div>`;
+    }).join('')}</div>`;
+  }).join('');
+}
+
+function renderResults(members, conflicts) {
+  const cTeams = new Set(conflicts.map(c=>c.team));
+  const rpsResults = Array.isArray(roomData.rpsResults) ? roomData.rpsResults : Object.values(roomData.rpsResults||{});
+  const confirmed = Object.values(members).filter(m=>m.team);
+  const list = document.getElementById('results-list');
+  if (!confirmed.length) { list.innerHTML='<div style="color:#555;text-align:center;padding:28px 0">ยังไม่มีการยืนยันทีม...</div>'; return; }
+  list.innerHTML = confirmed.map(m => {
+    const td = TEAMS.find(t=>t.en===m.team);
+    const isConflict = cTeams.has(m.team);
+    const rpsWin = rpsResults.find(r=>r.winnerUid===m.uid&&r.team===m.team);
+    return `<div class="result-item">
+      ${m.avatar?`<img src="${m.avatar}" alt="">`:'<span style="font-size:1.4rem">👤</span>'}
+      <span style="font-size:1.4rem">${td?td.flag:'🏳️'}</span>
+      <div style="flex:1">
+        <div style="font-weight:700">${m.name}</div>
+        <div style="font-size:.83rem;color:#999">${td?td.name:m.team} ${isConflict?'⚠️ (ซ้ำ)':''}</div>
+        ${rpsWin?'<div style="font-size:.72rem;color:#666">🏆 ชนะจากเป่ายิงฉุบ</div>':''}
+      </div>
+      ${rpsWin?'<span style="color:var(--accent)">🏆</span>':''}
+    </div>`;
+  }).join('');
+}
+
+// ===== TEAM SELECT =====
+window.selectTeam = (en) => {
+  if (!roomCode||confirmedTeam) return;
+  mySelection = en;
+  document.getElementById('confirmBtn').style.display='inline-block';
+  const members = roomData.members||{};
+  renderTeams(members, new Set(getConflicts(members).map(c=>c.team)));
+};
+
+window.confirmTeam = async () => {
+  if (!mySelection) return;
+  confirmedTeam = mySelection;
+  await update(ref(db,'rooms/'+roomCode+'/members/'+myUser.uid), { team:confirmedTeam, confirmedAt:Date.now() });
+  const td = TEAMS.find(t=>t.en===confirmedTeam);
+  toast(`${td.flag} ยืนยันแล้ว! เชียร์ ${td.name}!`);
+  document.getElementById('confirmBtn').style.display='none';
+};
+
+// ===== RPS =====
+const RPS_E = {rock:'✊',paper:'🖐',scissors:'✌️'};
+const RPS_N = {rock:'กำปั้น',paper:'กระดาษ',scissors:'กรรไกร'};
+const RPS_W = {rock:'scissors',paper:'rock',scissors:'paper'};
+
+window.goToRPS = () => switchTab('rps');
+
+function updateRPSUI(members, conflicts) {
+  const myConflicts = conflicts.filter(c=>c.members.some(m=>m.uid===myUser.uid));
+  const rpsState = roomData.rpsState||{};
+
+  if (myConflicts.length===0) {
+    document.getElementById('rpsInfo').textContent='ไม่มีทีมซ้ำกัน ✅';
+    document.getElementById('rpsStatus').textContent='ไม่จำเป็นต้องเป่ายิงฉุบ';
+    ['rpsRock','rpsPaper','rpsScissors'].forEach(id=>document.getElementById(id).disabled=true);
+    return;
+  }
+
+  const c = myConflicts[0];
+  const opponents = c.members.filter(m=>m.uid!==myUser.uid);
+  const td = TEAMS.find(t=>t.en===c.team);
+  document.getElementById('rpsInfo').textContent=`คุณ vs ${opponents.map(m=>m.name).join(', ')} — ทีม ${td?td.flag+' '+td.name:c.team}`;
+  document.getElementById('rpsConflictDetail').textContent=`ทีม: ${td?td.flag+' '+td.name:c.team}`;
+
+  const myMove = rpsState[myUser.uid];
+  const allMoved = c.members.every(m=>rpsState[m.uid]);
+
+  if (allMoved) {
+    document.getElementById('rpsStatus').textContent='🎯 ผลการเป่า!';
+    ['rpsRock','rpsPaper','rpsScissors'].forEach(id=>document.getElementById(id).disabled=true);
+    document.getElementById('rpsWaiting').style.display='none';
+    showRPSResult(c, rpsState);
+  } else if (myMove) {
+    document.getElementById('rpsStatus').textContent=`คุณเลือก ${RPS_E[myMove]} ${RPS_N[myMove]} แล้ว — รออีกฝ่าย...`;
+    document.getElementById('rpsWaiting').style.display='block';
+    ['rpsRock','rpsPaper','rpsScissors'].forEach(id=>document.getElementById(id).disabled=true);
+    document.getElementById('rps'+myMove.charAt(0).toUpperCase()+myMove.slice(1)).classList.add('chosen');
+  } else {
+    document.getElementById('rpsStatus').textContent='เลือกมือของคุณ!';
+    document.getElementById('rpsWaiting').style.display='none';
+    ['rpsRock','rpsPaper','rpsScissors'].forEach(id=>{ const el=document.getElementById(id); el.disabled=false; el.classList.remove('chosen'); });
+    document.getElementById('rpsResultArea').innerHTML='';
+    document.getElementById('rpsPlayAgainArea').style.display='none';
+  }
+}
+
+window.chooseRPS = async (choice) => {
+  if (!roomCode) return;
+  await update(ref(db,'rooms/'+roomCode+'/rpsState'), { [myUser.uid]: choice });
+  toast(`${RPS_E[choice]} เลือก ${RPS_N[choice]} แล้ว!`);
+};
+
+async function showRPSResult(conflict, rpsState) {
+  const opp = conflict.members.find(m=>m.uid!==myUser.uid);
+  const myMove = rpsState[myUser.uid];
+  const oppMove = rpsState[opp.uid];
+  const td = TEAMS.find(t=>t.en===conflict.team);
+
+  let outcome, winnerUid, winnerName;
+  if (myMove===oppMove) { outcome='draw'; }
+  else if (RPS_W[myMove]===oppMove) { outcome='win'; winnerUid=myUser.uid; winnerName=myUser.name; }
+  else { outcome='lose'; winnerUid=opp.uid; winnerName=opp.name; }
+
+  let html = `<div class="vs-display">
+    <div class="player-choice"><span class="ce">${RPS_E[myMove]}</span><div class="cn">${myUser.name}</div></div>
+    <span class="vs-text">VS</span>
+    <div class="player-choice"><span class="ce">${RPS_E[oppMove]}</span><div class="cn">${opp.name}</div></div>
+  </div>`;
+
+  if (outcome==='draw') {
+    html+=`<div class="rps-result draw"><div style="font-size:2.2rem">🤝</div><div style="font-size:1.3rem;font-weight:700;color:var(--gold);margin:6px 0">เสมอ! เล่นใหม่!</div><div style="color:#999">ทั้งคู่เลือก ${RPS_N[myMove]}</div></div>`;
+    document.getElementById('rpsPlayAgainArea').style.display='block';
+  } else {
+    const isWin = outcome==='win';
+    html+=`<div class="rps-result ${outcome}"><div style="font-size:2.2rem">${isWin?'🏆':'😢'}</div>
+      <div style="font-size:1.3rem;font-weight:700;color:${isWin?'var(--green)':'var(--red)'};margin:6px 0">${isWin?'🎉 คุณชนะ!':'😢 คุณแพ้'}</div>
+      <div style="color:#999">${winnerName} ได้สิทธิ์เชียร์ ${td?td.flag+' '+td.name:conflict.team}!</div>
+    </div>`;
+
+    if (winnerUid===myUser.uid) {
+      const rpsResults = Array.isArray(roomData.rpsResults)?roomData.rpsResults:Object.values(roomData.rpsResults||{});
+      const already = rpsResults.find(r=>r.team===conflict.team);
+      if (!already) {
+        rpsResults.push({ winnerUid, winnerName, team:conflict.team, at:Date.now() });
+        await update(ref(db,'rooms/'+roomCode), { rpsResults });
+        const updates = {};
+        conflict.members.forEach(m => { if(m.uid!==winnerUid) updates['rooms/'+roomCode+'/members/'+m.uid+'/team']=null; });
+        if (Object.keys(updates).length) await update(ref(db), updates);
+      }
+    }
+  }
+  document.getElementById('rpsResultArea').innerHTML=html;
+}
+
+window.resetRPS = async () => {
+  if (!roomCode) return;
+  const members = roomData.members||{};
+  const conflicts = getConflicts(members);
+  const myConflicts = conflicts.filter(c=>c.members.some(m=>m.uid===myUser.uid));
+  if (!myConflicts.length) return;
+  const updates = {};
+  myConflicts[0].members.forEach(m=>{ updates['rooms/'+roomCode+'/rpsState/'+m.uid]=null; });
+  await update(ref(db), updates);
+  document.getElementById('rpsResultArea').innerHTML='';
+  document.getElementById('rpsPlayAgainArea').style.display='none';
+  toast('🔄 รีเซ็ต เล่นใหม่!');
+};
+
+// ===== INIT =====
+window.addEventListener('load', async () => {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const state = params.get('state');
+
+  // Check saved user
+  const saved = localStorage.getItem('line_user');
+  if (saved) {
+    myUser = JSON.parse(saved);
+    showApp();
+    return;
+  }
+
+  // LINE callback
+  if (code && state) {
+    await handleLineCallback(code);
+    return;
+  }
+
+  // Show login
+  document.getElementById('loginScreen').style.display='flex';
+});
+</script>
+</body>
+</html>
