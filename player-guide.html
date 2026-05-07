@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>วิธีเล่น — บ้านท้ายซอย</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Bebas+Neue&display=swap');
+
+:root {
+  --gold: #FFD700;
+  --gold2: #FFA500;
+  --dark: #060b15;
+  --card: #0f1923;
+  --card2: #162030;
+  --green: #00ff88;
+  --red: #ff4466;
+  --accent: #00e5ff;
+  --line: #06C755;
+  --white: #f0f4ff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--dark);
+  color: var(--white);
+  font-family: 'Sarabun', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background stars */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 70%, rgba(255,255,255,.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,.2) 0%, transparent 100%),
+    radial-gradient(ellipse at 20% 50%, rgba(0,229,255,.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(255,165,0,.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,215,0,.08);
+  border: 1px solid rgba(255,215,0,.2);
+  border-radius: 30px;
+  padding: 6px 18px;
+  font-size: .78rem;
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  letter-spacing: 4px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 40%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.header p {
+  color: rgba(255,255,255,.5);
+  font-size: 1rem;
+}
+
+/* STEP CARDS */
+.steps { display: flex; flex-direction: column; gap: 0; }
+
+.step {
+  display: flex;
+  gap: 0;
+  position: relative;
+}
+
+/* Connector line */
+.step:not(:last-child) .step-left::after {
+  content: '';
+  position: absolute;
+  top: 52px;
+  left: 25px;
+  width: 2px;
+  height: calc(100% - 4px);
+  background: linear-gradient(to bottom, rgba(255,215,0,.3), rgba(255,215,0,.05));
+  z-index: 0;
+}
+
+.step-left {
+  position: relative;
+  width: 52px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.step-number {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  transition: transform .3s;
+}
+
+.step:hover .step-number { transform: scale(1.1); }
+
+.step-content {
+  flex: 1;
+  padding: 0 0 36px 20px;
+}
+
+.step-card {
+  background: var(--card);
+  border-radius: 18px;
+  padding: 20px 22px;
+  border: 1px solid rgba(255,255,255,.06);
+  position: relative;
+  overflow: hidden;
+  transition: transform .3s, border-color .3s;
+}
+
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  border-radius: 18px 18px 0 0;
+}
+
+.step:hover .step-card {
+  transform: translateX(4px);
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.step-icon {
+  font-size: 1.5rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.step-sub {
+  font-size: .78rem;
+  color: rgba(255,255,255,.45);
+  margin-top: 2px;
+}
+
+.step-body {
+  font-size: .88rem;
+  color: rgba(255,255,255,.7);
+  line-height: 1.7;
+}
+
+.step-body strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* STEP VARIANTS */
+.step-line .step-number { background: linear-gradient(135deg, #06C755, #04a344); color: #fff; }
+.step-line .step-card { border-color: rgba(6,199,85,.2); }
+.step-line .step-card::before { background: linear-gradient(90deg, #06C755, transparent); }
+.step-line .step-icon { background: rgba(6,199,85,.12); }
+.step-line .step-title { color: #06C755; }
+
+.step-pick .step-number { background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #000; }
+.step-pick .step-card { border-color: rgba(255,215,0,.2); }
+.step-pick .step-card::before { background: linear-gradient(90deg, var(--gold), transparent); }
+.step-pick .step-icon { background: rgba(255,215,0,.1); }
+.step-pick .step-title { color: var(--gold); }
+
+.step-game .step-number { background: linear-gradient(135deg, #9b59b6, #6c3483); color: #fff; }
+.step-game .step-card { border-color: rgba(155,89,182,.25); }
+.step-game .step-card::before { background: linear-gradient(90deg, #9b59b6, transparent); }
+.step-game .step-icon { background: rgba(155,89,182,.12); }
+.step-game .step-title { color: #c39bd3; }
+
+.step-score .step-number { background: linear-gradient(135deg, var(--accent), #0088cc); color: #000; }
+.step-score .step-card { border-color: rgba(0,229,255,.2); }
+.step-score .step-card::before { background: linear-gradient(90deg, var(--accent), transparent); }
+.step-score .step-icon { background: rgba(0,229,255,.1); }
+.step-score .step-title { color: var(--accent); }
+
+.step-bet .step-number { background: linear-gradient(135deg, var(--green), #00cc66); color: #000; }
+.step-bet .step-card { border-color: rgba(0,255,136,.2); }
+.step-bet .step-card::before { background: linear-gradient(90deg, var(--green), transparent); }
+.step-bet .step-icon { background: rgba(0,255,136,.1); }
+.step-bet .step-title { color: var(--green); }
+
+/* TAGS */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-weight: 700;
+}
+.tag-gold { background: rgba(255,215,0,.1); color: var(--gold); border: 1px solid rgba(255,215,0,.2); }
+.tag-green { background: rgba(0,255,136,.1); color: var(--green); border: 1px solid rgba(0,255,136,.2); }
+.tag-red { background: rgba(255,68,102,.1); color: var(--red); border: 1px solid rgba(255,68,102,.2); }
+.tag-blue { background: rgba(0,229,255,.1); color: var(--accent); border: 1px solid rgba(0,229,255,.2); }
+.tag-purple { background: rgba(155,89,182,.15); color: #c39bd3; border: 1px solid rgba(155,89,182,.25); }
+
+/* MINI MOCKUP */
+.mockup {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  font-size: .8rem;
+  color: rgba(255,255,255,.6);
+}
+.mockup-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  background: var(--card2);
+}
+.mockup-row:last-child { margin-bottom: 0; }
+.mockup-row .flag { font-size: 1rem; }
+.mockup-row .mname { flex: 1; font-weight: 600; color: #ddd; }
+.mockup-row .mbadge { font-size: .68rem; padding: 2px 7px; border-radius: 10px; }
+.conflict-row { border: 1px solid rgba(255,68,102,.3); background: rgba(255,68,102,.06) !important; }
+.win-row { border: 1px solid rgba(0,255,136,.3); background: rgba(0,255,136,.05) !important; }
+
+/* GAME CARDS */
+.game-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.game-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--card2);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: .8rem;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,.07);
+}
+
+/* DIVIDER */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,215,0,.15), transparent);
+  margin: 8px 0 28px;
+}
+
+/* FOOTER TIPS */
+.tips-section {
+  margin-top: 12px;
+  background: var(--card);
+  border: 1px solid rgba(255,215,0,.15);
+  border-radius: 20px;
+  padding: 24px;
+}
+.tips-section h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 2px;
+  color: var(--gold);
+  margin-bottom: 16px;
+  text-align: center;
+}
+.tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.tip-item {
+  background: var(--card2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,.05);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.tip-item .tip-icon { font-size: 1.3rem; flex-shrink: 0; }
+.tip-item .tip-text { font-size: .8rem; color: rgba(255,255,255,.65); line-height: 1.5; }
+.tip-item .tip-text strong { color: #fff; }
+
+/* RPS DEMO */
+.rps-row { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+.rps-item {
+  width: 54px; height: 54px;
+  border-radius: 50%;
+  background: var(--card2);
+  border: 2px solid rgba(255,255,255,.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; flex-direction: column;
+}
+.rps-item span { font-size: .5rem; color: #777; margin-top: 2px; }
+
+/* COINS DEMO */
+.coin-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,215,0,.06);
+  border: 1px solid rgba(255,215,0,.15);
+  border-radius: 10px;
+  padding: 8px 14px;
+  margin-top: 8px;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  margin-top: 48px;
+  color: rgba(255,255,255,.2);
+  font-size: .75rem;
+}
+.footer span { color: var(--gold); }
+
+/* ANIMATE IN */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.step { animation: fadeUp .5s ease both; }
+.step:nth-child(1) { animation-delay: .1s; }
+.step:nth-child(2) { animation-delay: .2s; }
+.step:nth-child(3) { animation-delay: .3s; }
+.step:nth-child(4) { animation-delay: .4s; }
+.step:nth-child(5) { animation-delay: .5s; }
+.tips-section { animation: fadeUp .5s ease .6s both; }
+
+@media (max-width: 500px) {
+  .tips-grid { grid-template-columns: 1fr; }
+  .game-pills { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge">⚽ FIFA World Cup 2026</div>
+    <h1>วิธีเล่น</h1>
+    <p>คู่มือสำหรับผู้เล่น · บ้านท้ายซอย</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- STEPS -->
+  <div class="steps">
+
+    <!-- STEP 1: Login -->
+    <div class="step step-line">
+      <div class="step-left">
+        <div class="step-number">1</div>
+      </div>
+      <div class="step-content">
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-icon">🟢</div>
+            <div>
+              <div class="step-title">เข้าสู่ระบบด้วย LINE</div>
+              <div class="step-sub">เข้าลิงค์ที่เจ้าของห้องส่งให้</div>
+            </div>
+          </div>
+          <div class="step-body">
+            กดปุ่ม <strong>เข้าสู่ระบบด้วย LINE</strong> ระบบจะดึงชื่อและรูปโปรไฟล์ LINE ของคุณมาแสดงให้เพื่อนในกลุ่มเห็นโดยอัตโนมัติ ไม่ต้องสมัครหรือตั้งรหัสผ่านใหม่
+          </div>
+          <div class="tags">
+            <span class="tag tag-green">✅ ไม่ต้องสมัครสมาชิก</span>
+            <span class="tag tag-blue">🔒 ปลอดภัย</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Join Room -->
+    <div class="step step-pick">
+      <div class="step-left">
+        <div class="step-number">2</div>
+      </div>
+      <div class="step-content">
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-icon">🏠</div>
+            <div>
+              <div class="step-title">เข้าห้องกลุ่ม</div>
+              <div class="step-sub">ใช้รหัส 6 ตัวที่ได้รับ</div>
+            </div>
+          </div>
+          <div class="step-body">
+            เลือกห้องจากรายการที่มีอยู่ หรือพิมพ์ <strong>รหัสห้อง 6 ตัว</strong> ที่เจ้าของห้องส่งให้ แล้วกด <strong>"เข้าร่วม"</strong>
+          </div>
+          <div class="mockup" style="margin-top:12px;">
+            <div class="mockup-row">
+              <span>🏠</span><span class="mname">ห้องของ Psr</span>
+              <span class="mbadge" style="background:rgba(0,255,136,.1);color:#00ff88">● 4 ออนไลน์</span>
+            </div>
+            <div style="font-size:.7rem;color:rgba(255,255,255,.3);text-align:center;padding:4px 0">↑ กดที่ห้องเพื่อ fill รหัสอัตโนมัติ แล้วกดเข้าร่วม</div>
+          </div>
+          <div class="tags">
+            <span class="tag tag-gold">🔑 ต้องใช้รหัสเท่านั้น</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Pick Team -->
+    <div class="step step-pick">
+      <div class="step-left">
+        <div class="step-number">3</div>
+      </div>
+      <div class="step-content">
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-icon">⚽</div>
+            <div>
+              <div class="step-title">เลือกทีมที่ต้องการเชียร์</div>
+              <div class="step-sub">เปลี่ยนใจได้ก่อน 17 พ.ค. 2569</div>
+            </div>
+          </div>
+          <div class="step-body">
+            เลือกทีมที่ชอบจาก 48 ทีมใน 12 กลุ่ม แล้วกด <strong>"✅ ยืนยัน!"</strong> ชื่อและรูปโปรไฟล์ LINE ของคุณจะแสดงบนการ์ดทีมนั้นทันที
+          </div>
+          <div class="mockup">
+            <div class="mockup-row win-row">
+              <span class="flag">🇧🇷</span>
+              <span class="mname">บราซิล</span>
+              <span style="font-size:.72rem;color:rgba(255,255,255,.4)">กลุ่ม C</span>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;margin-top:6px;padding:0 4px;">
+              <div style="width:20px;height:20px;border-radius:50%;background:rgba(255,215,0,.2);border:1px solid rgba(255,215,0,.3);display:flex;align-items:center;justify-content:center;font-size:.7rem;">👤</div>
+              <span style="font-size:.72rem;color:rgba(255,255,255,.5);">คุณ เลือกทีมนี้</span>
+              <span style="margin-left:auto;font-size:.7rem;color:var(--green);">✅ ยืนยันแล้ว</span>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tag tag-gold">⏰ เปลี่ยนใจได้ก่อน 17 พ.ค. 69</span>
+            <span class="tag tag-red">🔒 หลังวันนั้นล็อค</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: Conflict & Game -->
+    <div class="step step-game">
+      <div class="step-left">
+        <div class="step-number">4</div>
+      </div>
+      <div class="step-content">
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-icon">🎮</div>
+            <div>
+              <div class="step-title">ถ้าเลือกทีมซ้ำกัน — แข่ง 3 เกม!</div>
+              <div class="step-sub">ชนะ 2 ใน 3 ได้ทีมนั้นไป</div>
+            </div>
+          </div>
+          <div class="step-body">
+            หากมีคนเลือกทีมเดียวกัน จะต้องแข่ง <strong>3 เกมตัดสิน</strong> แต่ละเกมเล่นคนเดียวได้เลย ไม่ต้องรอให้อีกฝ่ายออนไลน์พร้อมกัน
+          </div>
+          <div class="game-pills">
+            <div class="game-pill" style="border-color:rgba(255,215,0,.2);">✊ <span style="color:var(--gold)">เป่ายิงฉุบ</span></div>
+            <div class="game-pill" style="border-color:rgba(0,255,136,.2);">👆 <span style="color:var(--green)">กดปุ่มเร็ว</span> <span style="color:rgba(255,255,255,.4);font-size:.68rem;">5 วิ</span></div>
+            <div class="game-pill" style="border-color:rgba(0,229,255,.2);">⏱️ <span style="color:var(--accent)">หยุดตรงเวลา</span> <span style="color:rgba(255,255,255,.4);font-size:.68rem;">5.00s</span></div>
+          </div>
+          <div class="mockup" style="margin-top:12px;">
+            <div class="mockup-row conflict-row">
+              <span style="font-size:.85rem;">⚠️</span>
+              <span class="mname" style="font-size:.8rem;">คุณและ Pond ต่างเลือก 🇦🇷 อาร์เจนตินา</span>
+            </div>
+            <div style="text-align:center;margin-top:6px;font-size:.72rem;color:rgba(255,255,255,.35);">→ ไปแท็บ 🎮 ตัดสิน เพื่อเล่นเกม</div>
+          </div>
+          <div class="tags">
+            <span class="tag tag-purple">🏆 ชนะ 2 ใน 3 ได้ทีม</span>
+            <span class="tag tag-blue">📴 เล่นได้ตอนไหนก็ได้</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5: Live Score -->
+    <div class="step step-score">
+      <div class="step-left">
+        <div class="step-number">5</div>
+      </div>
+      <div class="step-content">
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-icon">📺</div>
+            <div>
+              <div class="step-title">ดูสกอร์ Live</div>
+              <div class="step-sub">แท็บ 📺 สกอร์ · อัปเดตโดย Admin</div>
+            </div>
+          </div>
+          <div class="step-body">
+            ดูผลแมตช์บอลโลกแบบ real-time แมตช์ที่มี <strong>ทีมของคนในห้องเล่นอยู่</strong> จะไฮไลต์สีทอง ⭐ และแมตช์ที่กำลังเตะจะกระพริบขอบแดง
+          </div>
+          <div class="mockup">
+            <div class="mockup-row" style="border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.04);">
+              <span style="font-size:.68rem;color:var(--gold);">⭐</span>
+              <span class="flag">🇧🇷</span>
+              <span class="mname" style="font-size:.8rem;text-align:center;">2 — 1</span>
+              <span class="flag">🇦🇷</span>
+              <span class="mbadge" style="background:rgba(255,68,102,.15);color:var(--red);animation:none;">🔴 Live</span>
+            </div>
+            <div style="font-size:.68rem;color:rgba(255,255,255,.3);text-align:center;padding:4px 0">ทีมของ Psr และ Pond กำลังแข่งกัน!</div>
+          </div>
+          <div class="tags">
+            <span class="tag tag-gold">⭐ ไฮไลต์ทีมในห้อง</span>
+            <span class="tag tag-red">🔴 Live กระพริบ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6: Bet -->
+    <div class="step step-bet">
+      <div class="step-left">
+        <div class="step-number">6</div>
+      </div>
+      <div class="step-content">
+        <div class="step-card">
+          <div class="step-header">
+            <div class="step-icon">🎲</div>
+            <div>
+              <div class="step-title">ทายผลเดิมพัน</div>
+              <div class="step-sub">แท็บ 🎲 ทายผล · ใช้เหรียญสมมติ</div>
+            </div>
+          </div>
+          <div class="step-body">
+            ทุกคนได้รับ <strong>🪙 1,000 เหรียญ</strong> เริ่มต้น ใช้เดิมพันผลบอล ใครทายถูกได้เหรียญของคู่แข่ง + 3 คะแนน Leaderboard สามารถสร้างเดิมพันหรือเข้าร่วมเดิมพันของคนอื่นได้
+          </div>
+          <div class="coin-bar">
+            <span style="font-size:.85rem;color:rgba(255,255,255,.5);">เหรียญของคุณ</span>
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);">🪙 1,000</span>
+          </div>
+          <div class="mockup" style="margin-top:10px;">
+            <div style="font-size:.72rem;color:rgba(255,255,255,.4);margin-bottom:6px;">รายการเดิมพันที่รอผล</div>
+            <div class="mockup-row">
+              <span style="font-size:.85rem;">🇧🇷</span>
+              <span class="mname" style="font-size:.78rem;">บราซิล vs อาร์เจนตินา</span>
+              <span class="mbadge tag-green">🟢 รอคู่แข่ง</span>
+            </div>
+            <div class="mockup-row" style="margin-top:4px;">
+              <span style="font-size:.85rem;">🇫🇷</span>
+              <span class="mname" style="font-size:.78rem;">ฝรั่งเศส vs สเปน</span>
+              <span class="mbadge tag-gold" style="font-size:.65rem;padding:2px 6px;">🟡 จับคู่แล้ว</span>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tag tag-green">🪙 1,000 เหรียญเริ่มต้น</span>
+            <span class="tag tag-gold">⭐ +3 คะแนน ถ้าชนะ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end steps -->
+
+  <!-- TIPS SECTION -->
+  <div class="tips-section">
+    <h2>💡 เคล็ดลับ</h2>
+    <div class="tips-grid">
+      <div class="tip-item">
+        <span class="tip-icon">🔗</span>
+        <div class="tip-text"><strong>กดลิงค์ที่ได้รับ</strong><br>ลิงค์จะพาเข้าห้องอัตโนมัติ ไม่ต้องพิมพ์รหัสเอง</div>
+      </div>
+      <div class="tip-item">
+        <span class="tip-icon">🔄</span>
+        <div class="tip-text"><strong>รีเฟรชหน้าได้สบาย</strong><br>ระบบจำห้องและทีมที่เลือกไว้ ไม่หายแม้ปิดแอป</div>
+      </div>
+      <div class="tip-item">
+        <span class="tip-icon">⚡</span>
+        <div class="tip-text"><strong>ทีมซ้ำ = ได้เล่นเกม!</strong><br>เลือกทีมซ้ำเพื่อท้าทายคนที่เลือกอยู่ก่อนได้</div>
+      </div>
+      <div class="tip-item">
+        <span class="tip-icon">📱</span>
+        <div class="tip-text"><strong>เล่นได้บนมือถือ</strong><br>เปิดผ่านเบราว์เซอร์ LINE ได้เลย ไม่ต้องลงแอป</div>
+      </div>
+      <div class="tip-item">
+        <span class="tip-icon">🎯</span>
+        <div class="tip-text"><strong>เกมเล่นคนเดียวได้</strong><br>ไม่ต้องรอให้คู่แข่งออนไลน์พร้อมกัน</div>
+      </div>
+      <div class="tip-item">
+        <span class="tip-icon">🏆</span>
+        <div class="tip-text"><strong>Leaderboard รวม</strong><br>คะแนนมาจากทั้งเกมตัดสินทีมและการทายผล</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>🏆 <span>บ้านท้ายซอย</span> · FIFA World Cup 2026 · www.บ้านท้ายซอย.online</p>
+  </div>
+
+</div>
+</body>
+</html>
