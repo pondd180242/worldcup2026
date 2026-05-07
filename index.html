@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚽ บ้านท้ายซอย - เลือกทีมบอลโลก 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Bebas+Neue&display=swap');
+  :root{--gold:#FFD700;--gold2:#FFA500;--darker:#060b15;--card:#111827;--card2:#1a2540;--accent:#00e5ff;--green:#00ff88;--red:#ff4466;--line:#06C755;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--darker);color:#eee;font-family:'Sarabun',sans-serif;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(0,229,255,.07) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(255,165,0,.07) 0%,transparent 50%);pointer-events:none;z-index:0;}
+  .container{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:20px;}
+  .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px;}
+  .login-box{background:var(--card);border:1px solid rgba(255,215,0,.15);border-radius:24px;padding:40px 36px;max-width:400px;width:100%;}
+  .login-box h1{font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:4px;background:linear-gradient(135deg,var(--gold),var(--gold2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
+  .login-box p{color:#888;font-size:.95rem;margin-bottom:28px;}
+  .btn-line{display:flex;align-items:center;justify-content:center;gap:12px;background:var(--line);color:#fff;border:none;border-radius:14px;padding:16px 28px;font-family:'Sarabun',sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer;width:100%;transition:all .2s;}
+  .btn-line:hover{background:#05a847;transform:translateY(-2px);box-shadow:0 8px 24px rgba(6,199,85,.35);}
+  .btn-line svg{width:28px;height:28px;}
+  .login-note{color:#555;font-size:.78rem;margin-top:16px;}
+  .user-bar{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:10px 16px;margin-bottom:16px;}
+  .user-avatar{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);object-fit:cover;}
+  .user-name{font-weight:700;font-size:.95rem;flex:1;}
+  .btn-logout{background:rgba(255,255,255,.07);border:none;border-radius:8px;padding:6px 12px;color:#888;font-family:'Sarabun',sans-serif;font-size:.8rem;cursor:pointer;}
+  .tabs{display:flex;gap:6px;margin:16px 0;background:var(--card);padding:6px;border-radius:14px;border:1px solid rgba(255,255,255,.06);}
+  .tab-btn{flex:1;padding:9px 4px;border:none;border-radius:10px;background:transparent;color:#888;font-family:'Sarabun',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .3s;}
+  .tab-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;}
+  .section{display:none;}.section.active{display:block;}
+  .room-card{background:var(--card);border:1px solid rgba(255,215,0,.15);border-radius:20px;padding:24px;margin-bottom:20px;}
+  .room-card h2{font-size:1.2rem;color:var(--gold);margin-bottom:16px;}
+  .room-info{background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:16px;margin-top:12px;}
+  .room-code{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:8px;color:var(--gold);text-align:center;display:block;}
+  .room-link{background:var(--card2);border-radius:8px;padding:8px 12px;font-size:.8rem;color:var(--accent);word-break:break-all;margin-top:8px;cursor:pointer;text-align:center;}
+  .input-row{display:flex;gap:10px;flex-wrap:wrap;}
+  input[type="text"]{flex:1;min-width:180px;background:var(--card2);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;color:#fff;font-family:'Sarabun',sans-serif;font-size:1rem;outline:none;transition:border-color .3s;}
+  input[type="text"]:focus{border-color:var(--gold);}
+  input[type="text"]::placeholder{color:#555;}
+  .btn{padding:11px 20px;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:.93rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+  .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;}
+  .btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,165,0,.4);}
+  .btn-accent{background:linear-gradient(135deg,var(--accent),#0099bb);color:#000;}
+  .btn-green{background:linear-gradient(135deg,var(--green),#00cc66);color:#000;}
+  .btn-danger{background:rgba(255,68,102,.12);border:1px solid rgba(255,68,102,.25);color:var(--red);}
+  .btn-sm{padding:7px 14px;font-size:.82rem;}
+  .members-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .member-chip{background:var(--card2);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:5px 12px;font-size:.82rem;display:flex;align-items:center;gap:6px;}
+  .member-chip img{width:20px;height:20px;border-radius:50%;}
+  .member-chip.has-team{border-color:var(--green);background:rgba(0,255,136,.07);}
+  .member-chip.conflict{border-color:var(--red);background:rgba(255,68,102,.07);animation:pulse-red 1.5s infinite;}
+  @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(255,68,102,0)}50%{box-shadow:0 0 0 5px rgba(255,68,102,.12)}}
+  .group-header{display:flex;align-items:center;gap:10px;margin:20px 0 10px;}
+  .group-label{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:2px;}
+  .group-line{flex:1;height:1px;background:rgba(255,215,0,.12);}
+  .teams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:9px;margin-bottom:8px;}
+  .team-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:11px 13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:9px;position:relative;overflow:hidden;}
+  .team-card:hover{border-color:var(--gold);transform:translateY(-1px);}
+  .team-card.selected{border-color:var(--green);background:rgba(0,255,136,.07);}
+  .team-card.taken{opacity:.4;cursor:not-allowed;}
+  .team-card.conflict-team{border-color:var(--red)!important;background:rgba(255,68,102,.09)!important;animation:pulse-red 1.5s infinite;}
+  .team-flag{font-size:1.5rem;line-height:1;}
+  .team-info{flex:1;min-width:0;}
+  .team-name{font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .team-sub{font-size:.68rem;color:#666;}
+  .check-icon{position:absolute;top:5px;right:7px;color:var(--green);font-size:.85rem;}
+  .team-pickers{display:flex;align-items:center;gap:3px;margin-top:5px;flex-wrap:wrap;}
+  .picker-av{width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(255,255,255,.18);object-fit:cover;}
+  .picker-names{font-size:.63rem;color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;}
+  .summary-panel{background:var(--card);border:1px solid rgba(255,215,0,.12);border-radius:16px;padding:18px;margin-top:20px;}
+  .summary-panel h3{color:var(--gold);font-size:1rem;margin-bottom:12px;}
+  .summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:8px;}
+  .sum-item{background:var(--card2);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:9px;}
+  .sum-item.mine{border-color:rgba(0,255,136,.25);background:rgba(0,255,136,.05);}
+  .sum-item.clash{border-color:rgba(255,68,102,.25);background:rgba(255,68,102,.05);}
+  .sum-flag{font-size:1.5rem;line-height:1;}
+  .sum-info{flex:1;min-width:0;}
+  .sum-team{font-size:.84rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .sum-picker{display:flex;align-items:center;gap:4px;margin-top:4px;}
+  .sum-picker img{width:18px;height:18px;border-radius:50%;}
+  .sum-picker span{font-size:.7rem;color:#aaa;}
+  .conflict-banner{background:rgba(255,68,102,.08);border:1px solid rgba(255,68,102,.35);border-radius:16px;padding:18px;margin:14px 0;text-align:center;animation:pulse-border 2s infinite;}
+  @keyframes pulse-border{0%,100%{border-color:rgba(255,68,102,.35)}50%{border-color:rgba(255,68,102,.7)}}
+  .conflict-banner h3{color:var(--red);margin-bottom:6px;}
+  .results-panel{background:var(--card);border:1px solid rgba(255,215,0,.13);border-radius:20px;padding:22px;margin-top:16px;}
+  .results-panel h2{color:var(--gold);margin-bottom:14px;}
+  .result-item{display:flex;align-items:center;gap:12px;padding:11px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:7px;border:1px solid rgba(255,255,255,.04);}
+  .result-item img{width:28px;height:28px;border-radius:50%;}
+
+  /* GAMES */
+  .game-select h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px;color:var(--gold);text-align:center;margin-bottom:6px;}
+  .game-select p{color:#888;text-align:center;font-size:.88rem;margin-bottom:20px;}
+  .game-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;}
+  .game-card{background:var(--card);border:2px solid rgba(255,255,255,.07);border-radius:16px;padding:22px 18px;cursor:pointer;transition:all .25s;text-align:center;}
+  .game-card:hover{transform:translateY(-3px);}
+  .game-card.rps:hover{border-color:var(--gold);}
+  .game-card.speed:hover{border-color:var(--green);}
+  .game-card.clock:hover{border-color:var(--accent);}
+  .game-card .gc-icon{font-size:2.8rem;margin-bottom:10px;display:block;}
+  .game-card .gc-title{font-size:1.1rem;font-weight:800;margin-bottom:8px;}
+  .game-card .gc-desc{font-size:.8rem;color:#888;line-height:1.6;}
+  .game-room{background:var(--card);border:2px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;margin-top:4px;}
+  .game-room.rps-theme{border-color:rgba(255,215,0,.2);}
+  .game-room.speed-theme{border-color:rgba(0,255,136,.2);}
+  .game-room.clock-theme{border-color:rgba(0,229,255,.2);}
+  .game-room h2{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:2px;text-align:center;margin-bottom:4px;}
+  .game-back{background:none;border:none;color:#666;font-family:'Sarabun',sans-serif;font-size:.85rem;cursor:pointer;margin-bottom:14px;padding:0;display:block;}
+  .game-back:hover{color:#aaa;}
+  .instructions{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:16px;margin-bottom:16px;}
+  .instructions h3{font-size:.95rem;margin-bottom:10px;color:var(--gold);}
+  .instructions ul{list-style:none;}
+  .instructions ul li{font-size:.85rem;color:#bbb;padding:5px 0 5px 20px;border-bottom:1px solid rgba(255,255,255,.04);position:relative;}
+  .instructions ul li:last-child{border:none;}
+  .instructions ul li::before{content:'▶';color:var(--accent);font-size:.55rem;position:absolute;left:4px;top:8px;}
+  .game-status{text-align:center;padding:10px;background:rgba(255,255,255,.04);border-radius:10px;margin-bottom:12px;font-weight:700;font-size:.9rem;}
+  .game-conflict-info{text-align:center;color:#888;font-size:.83rem;margin-bottom:10px;}
+  .game-players{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .gp-chip{background:var(--card2);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:5px 12px;font-size:.8rem;display:flex;align-items:center;gap:6px;}
+  .gp-chip img{width:20px;height:20px;border-radius:50%;}
+  .gp-chip.ready{border-color:var(--green);background:rgba(0,255,136,.07);}
+  /* RPS */
+  .rps-choices{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:14px 0;}
+  .rps-btn{width:86px;height:86px;border-radius:50%;border:2px solid rgba(255,255,255,.1);background:var(--card2);font-size:2.3rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+  .rps-btn span{font-size:.52rem;color:#888;margin-top:3px;font-family:'Sarabun',sans-serif;}
+  .rps-btn:hover{transform:scale(1.1);border-color:var(--gold);background:rgba(255,215,0,.08);}
+  .rps-btn.chosen{border-color:var(--gold);background:rgba(255,215,0,.1);}
+  .rps-btn:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+  /* SPEED */
+  .speed-score-row{display:flex;justify-content:center;gap:24px;margin-bottom:14px;flex-wrap:wrap;}
+  .speed-score-box{background:var(--card2);border-radius:12px;padding:12px 20px;text-align:center;min-width:90px;}
+  .speed-score-box .sc-name{font-size:.72rem;color:#888;margin-bottom:4px;}
+  .speed-score-box .sc-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--green);}
+  .speed-score-box.mine .sc-num{color:var(--gold);}
+  .speed-timer{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--accent);letter-spacing:3px;margin:8px 0;text-align:center;}
+  .speed-tap-btn{width:150px;height:150px;border-radius:50%;border:4px solid var(--green);background:rgba(0,255,136,.07);font-size:3rem;cursor:pointer;transition:all .1s;display:flex;align-items:center;justify-content:center;margin:0 auto;}
+  .speed-tap-btn:active{transform:scale(.92);background:rgba(0,255,136,.2);}
+  .speed-tap-btn:disabled{opacity:.3;cursor:not-allowed;}
+  /* CLOCK */
+  .clock-area{text-align:center;}
+  .clock-track{position:relative;width:100%;height:26px;background:rgba(255,255,255,.06);border-radius:13px;overflow:hidden;margin:14px 0;}
+  .clock-bar{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:13px;}
+  .clock-marker{position:absolute;top:0;left:50%;transform:translateX(-50%);width:3px;height:100%;background:var(--gold);opacity:.8;}
+  .clock-time-display{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;color:var(--accent);letter-spacing:4px;margin:8px 0;}
+  .clock-target{font-size:.88rem;color:#888;margin-bottom:12px;}
+  .clock-stop-btn{width:140px;height:140px;border-radius:50%;border:4px solid var(--accent);background:rgba(0,229,255,.07);font-size:2.5rem;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;margin:0 auto;}
+  .clock-stop-btn:active{transform:scale(.92);background:rgba(0,229,255,.2);}
+  .clock-stop-btn:disabled{opacity:.3;cursor:not-allowed;}
+  .clock-result-row{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:12px;}
+  .clock-result-box{background:var(--card2);border-radius:12px;padding:12px 16px;text-align:center;min-width:110px;}
+  .clock-result-box .cr-name{font-size:.72rem;color:#888;margin-bottom:4px;}
+  .clock-result-box .cr-time{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;}
+  .clock-result-box .cr-diff{font-size:.72rem;margin-top:2px;color:#666;}
+  .clock-result-box.winner-box{border:1px solid rgba(0,255,136,.3);background:rgba(0,255,136,.07);}
+  /* RESULT */
+  .game-result{text-align:center;padding:18px;border-radius:14px;margin-top:12px;}
+  .game-result.win{background:rgba(0,255,136,.09);border:1px solid rgba(0,255,136,.25);}
+  .game-result.lose{background:rgba(255,68,102,.09);border:1px solid rgba(255,68,102,.25);}
+  .game-result.draw{background:rgba(255,215,0,.07);border:1px solid rgba(255,215,0,.18);}
+  .game-result .gr-emoji{font-size:2.3rem;display:block;margin-bottom:8px;}
+  .game-result h3{font-size:1.3rem;margin-bottom:6px;}
+  .vs-display{display:flex;align-items:center;justify-content:center;gap:16px;margin:10px 0;flex-wrap:wrap;}
+  .player-choice{text-align:center;}
+  .player-choice .ce{font-size:2.4rem;display:block;}
+  .player-choice .cn{font-size:.75rem;color:#888;}
+  .vs-text{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:#444;}
+  /* ROOM LOBBY */
+  .lobby-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border-radius:10px;margin-bottom:8px;border:1px solid rgba(255,255,255,.06);cursor:pointer;transition:all .2s;}
+  .lobby-item:hover{border-color:var(--accent);transform:translateX(3px);}
+  .lobby-item.myroom{border-color:rgba(255,215,0,.25);background:rgba(255,215,0,.04);}
+  .lobby-name{font-weight:700;font-size:.9rem;}
+  .lobby-meta{font-size:.72rem;color:#777;margin-top:2px;}
+  .lobby-online{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:var(--green);font-weight:700;}
+  .lobby-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite;}
+  /* BET STYLES */
+  .bet-pick-btn{flex:1;min-width:80px;padding:10px 8px;border:2px solid rgba(255,255,255,.1);border-radius:10px;background:var(--card2);color:#ccc;font-family:'Sarabun',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;}
+  .bet-pick-btn:hover{border-color:var(--gold);}
+  .bet-pick-btn.active{border-color:var(--gold);background:rgba(255,215,0,.12);color:var(--gold);}
+  .bet-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+  .bet-card.open{border-color:rgba(0,229,255,.2);}
+  .bet-card.matched{border-color:rgba(255,165,0,.2);}
+  .bet-card.settled-win{border-color:rgba(0,255,136,.3);background:rgba(0,255,136,.04);}
+  .bet-card.settled-lose{border-color:rgba(255,68,102,.2);background:rgba(255,68,102,.03);}
+  .bet-match{font-size:.95rem;font-weight:700;margin-bottom:6px;}
+  .bet-meta{font-size:.76rem;color:#666;margin-bottom:8px;}
+  .bet-sides{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .bet-side{flex:1;min-width:80px;background:var(--card2);border-radius:8px;padding:8px 10px;text-align:center;font-size:.8rem;}
+  .bet-side.winner{background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.25);}
+  .bet-amount{display:inline-flex;align-items:center;gap:4px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:8px;padding:4px 10px;font-size:.85rem;color:var(--gold);font-weight:700;}
+  .lb-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border-radius:10px;margin-bottom:7px;border:1px solid rgba(255,255,255,.05);}
+  .lb-item.me{border-color:rgba(255,215,0,.25);background:rgba(255,215,0,.05);}
+  .lb-rank{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#555;width:24px;text-align:center;}
+  .lb-rank.top1{color:var(--gold);}
+  .lb-rank.top2{color:#aaa;}
+  .lb-rank.top3{color:#cd7f32;}
+  .lb-coins{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--gold);margin-left:auto;}
+  .lb-pts{font-size:.72rem;color:#888;}
+  select{-webkit-appearance:none;appearance:none;}
+  /* TOAST */
+  #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card2);border:1px solid rgba(255,215,0,.25);border-radius:12px;padding:11px 22px;color:#fff;font-size:.88rem;z-index:9999;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+  #toast.show{transform:translateX(-50%) translateY(0);}
+  .label{font-size:.78rem;color:#666;margin-bottom:5px;}
+  .divider{height:1px;background:rgba(255,255,255,.05);margin:14px 0;}
+  .mt-12{margin-top:12px;}.text-center{text-align:center;}
+  .conn-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px;animation:blink 1.5s infinite;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  @media(max-width:480px){.teams-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr))}.game-cards{grid-template-columns:1fr}.rps-btn{width:74px;height:74px;font-size:2rem;}}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div style="font-size:2.8rem;margin-bottom:8px">🏆</div>
+    <h1>บ้านท้ายซอย</h1>
+    <p>เลือกทีมเชียร์บอลโลก 2026<br>Login ด้วย LINE เพื่อบันทึกสิทธิ์ของคุณ</p>
+    <button class="btn-line" onclick="loginWithLine()">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.63 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+      เข้าสู่ระบบด้วย LINE
+    </button>
+    <div class="login-note">ระบบจะดึงชื่อและรูปโปรไฟล์ LINE<br>เพื่อแสดงให้เพื่อนในกลุ่มเห็น</div>
+  </div>
+</div>
+
+<div id="mainApp" style="display:none">
+<div class="container">
+  <div class="user-bar">
+    <img id="userAvatar" class="user-avatar" src="" alt="">
+    <span class="user-name" id="userName"></span>
+    <span><span class="conn-dot"></span><span style="font-size:.75rem;color:#666">Firebase</span></span>
+    <button class="btn-logout" onclick="logout()">ออก</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('pick')">⚽ เลือกทีม</button>
+    <button class="tab-btn" onclick="switchTab('results')">🏅 ผลการจับ</button>
+    <button class="tab-btn" onclick="switchTab('games')">🎮 ตัดสิน</button>
+    <button class="tab-btn" onclick="switchTab('bet')">🎲 ทายผล</button>
+  </div>
+
+  <!-- PICK TAB -->
+  <div id="tab-pick" class="section active">
+
+    <!-- ROOM LOBBY LIST -->
+    <div id="roomLobbyCard" class="room-card" style="margin-bottom:14px;">
+      <h2>🏘️ ห้องที่มีอยู่</h2>
+      <div id="roomLobbyList"><div style="color:#555;font-size:.85rem;text-align:center;padding:12px">กำลังโหลด...</div></div>
+    </div>
+
+    <div class="room-card">
+      <h2>🏠 บ้านท้ายซอย</h2>
+      <div id="setup-area">
+        <div class="label">เข้าร่วมห้องที่มีอยู่ด้วยรหัส</div>
+        <div class="input-row">
+          <input type="text" id="roomInput" placeholder="รหัส 6 ตัว..." maxlength="6" style="text-transform:uppercase;letter-spacing:4px;font-weight:700">
+          <button class="btn btn-accent" onclick="joinRoom()">เข้าร่วม</button>
+        </div>
+        <div class="divider"></div>
+        <div class="text-center"><button class="btn btn-gold" onclick="createRoom()">✨ สร้างห้องใหม่</button></div>
+      </div>
+      <div id="room-info-area" style="display:none">
+        <div class="room-info">
+          <div class="label text-center">รหัสห้อง — แชร์ให้เพื่อน</div>
+          <span class="room-code" id="roomCodeDisplay"></span>
+          <div class="room-link" id="shareLinkEl" onclick="copyLink()">📋 คลิกเพื่อคัดลอกลิงค์</div>
+        </div>
+        <div class="mt-12">
+          <div class="label">สมาชิก (<span id="memberCount">0</span> คน)</div>
+          <div class="members-list" id="membersList"></div>
+        </div>
+        <div class="mt-12 text-center"><button class="btn btn-danger btn-sm" onclick="resetRoom()">🗑️ รีเซ็ตห้อง</button></div>
+      </div>
+    </div>
+    <div id="conflict-area" style="display:none" class="conflict-banner">
+      <h3>⚠️ ทีมเดียวกัน! ต้องแข่งกัน</h3>
+      <p id="conflictMsg" style="color:#bbb;font-size:.9rem"></p>
+      <button class="btn btn-accent mt-12" onclick="switchTab('games')">🎮 ไปแข่ง 3 เกมตัดสิน!</button>
+    </div>
+    <div id="team-selector" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <div style="font-size:1.05rem;font-weight:700">เลือกทีมที่ต้องการเชียร์</div>
+        <button class="btn btn-gold btn-sm" id="confirmBtn" onclick="confirmTeam()" style="display:none">✅ ยืนยัน!</button>
+      </div>
+      <div id="deadlineBanner" style="font-size:.8rem;color:#888;margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:10px;text-align:center"></div>
+      <div id="changeTeamArea" style="display:none;text-align:center;margin-bottom:12px;">
+        <button class="btn btn-gray btn-sm" onclick="changeTeam()">🔄 เปลี่ยนทีม</button>
+      </div>
+      <div id="groups-container"></div>
+    </div>
+    <div id="summary-panel" class="summary-panel" style="display:none">
+      <h3>👥 สรุปการเลือกทีม</h3>
+      <div id="summary-grid" class="summary-grid"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS TAB -->
+  <div id="tab-results" class="section">
+    <div class="results-panel">
+      <h2>🏅 สรุปทีมที่ได้รับ</h2>
+      <div id="results-list"><div style="color:#555;text-align:center;padding:28px 0">ยังไม่มีการเลือกทีม...</div></div>
+    </div>
+  </div>
+
+  <!-- GAMES TAB -->
+  <div id="tab-games" class="section">
+
+    <!-- HEADER & SCOREBOARD -->
+    <div class="game-room" style="border-color:rgba(255,215,0,.2);margin-bottom:16px;padding:18px;">
+      <div style="text-align:center;margin-bottom:4px;">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:2px;color:var(--gold)">🎮 แข่ง 3 เกม ชนะ 2 ใน 3 ได้ทีมไป!</span>
+      </div>
+      <div id="gameConflictInfo" style="text-align:center;color:#888;font-size:.84rem;margin-bottom:14px;">เข้าห้องและเลือกทีมให้ซ้ำกับเพื่อนก่อน</div>
+      <!-- SCOREBOARD -->
+      <div id="scoreboard" style="display:none">
+        <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+          <div id="sbMe" style="background:var(--card2);border-radius:14px;padding:14px 20px;text-align:center;min-width:110px;border:2px solid rgba(255,215,0,.15);">
+            <div id="sbMeAvatar" style="font-size:1.4rem;margin-bottom:4px"></div>
+            <div id="sbMeName" style="font-size:.82rem;font-weight:700;margin-bottom:6px"></div>
+            <div id="sbMeScore" style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--gold);line-height:1">0</div>
+            <div style="font-size:.68rem;color:#666">คะแนน</div>
+          </div>
+          <div style="display:flex;align-items:center;font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#333">VS</div>
+          <div id="sbOpp" style="background:var(--card2);border-radius:14px;padding:14px 20px;text-align:center;min-width:110px;border:2px solid rgba(255,255,255,.06);">
+            <div id="sbOppAvatar" style="font-size:1.4rem;margin-bottom:4px"></div>
+            <div id="sbOppName" style="font-size:.82rem;font-weight:700;margin-bottom:6px"></div>
+            <div id="sbOppScore" style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:#aaa;line-height:1">0</div>
+            <div style="font-size:.68rem;color:#666">คะแนน</div>
+          </div>
+        </div>
+        <!-- game status row -->
+        <div style="display:flex;justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap;" id="gameStatusRow"></div>
+        <div id="finalResultArea"></div>
+        <div class="text-center mt-12" id="resetAllArea" style="display:none">
+          <button class="btn btn-danger btn-sm" onclick="resetAllGames()">🔄 รีเซ็ตแข่งใหม่ทั้งหมด</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME 1: RPS -->
+    <div class="game-room rps-theme" style="margin-bottom:14px;">
+      <h2 style="color:var(--gold);font-size:1.4rem;">✊ เกมที่ 1: เป่ายิงฉุบ</h2>
+      <div class="instructions" style="margin:10px 0;">
+        <h3>📖 วิธีเล่น</h3>
+        <ul>
+          <li>เลือกมือ: ✊ กำปั้น / 🖐 กระดาษ / ✌️ กรรไกร</li>
+          <li>กำปั้นชนะกรรไกร | กรรไกรชนะกระดาษ | กระดาษชนะกำปั้น</li>
+          <li>เลือกพร้อมกัน ผลเปิดเมื่อทั้งคู่เลือกแล้ว | เสมอ → เล่นใหม่</li>
+        </ul>
+      </div>
+      <div class="game-status" id="rpsStatus">รอเข้าห้อง...</div>
+      <div class="game-players" id="rpsPlayers"></div>
+      <div class="rps-choices">
+        <button class="rps-btn" id="rpsRock" onclick="chooseRPS('rock')">✊<span>กำปั้น</span></button>
+        <button class="rps-btn" id="rpsPaper" onclick="chooseRPS('paper')">🖐<span>กระดาษ</span></button>
+        <button class="rps-btn" id="rpsScissors" onclick="chooseRPS('scissors')">✌️<span>กรรไกร</span></button>
+      </div>
+      <div id="rpsWaiting" style="display:none;text-align:center;color:#888;font-size:.88rem;margin:8px 0">⏳ รอผู้เล่นอีกฝ่าย...</div>
+      <div id="rpsResultArea"></div>
+      <div class="text-center mt-12" id="rpsPlayAgain" style="display:none">
+        <button class="btn btn-gold btn-sm" onclick="resetGame('rps')">🔄 เสมอ — เล่นใหม่</button>
+      </div>
+    </div>
+
+    <!-- GAME 2: SPEED CLICK -->
+    <div class="game-room speed-theme" style="margin-bottom:14px;">
+      <h2 style="color:var(--green);font-size:1.4rem;">👆 เกมที่ 2: กดปุ่มให้เร็ว</h2>
+      <div class="instructions" style="margin:10px 0;">
+        <h3>📖 วิธีเล่น</h3>
+        <ul>
+          <li>กด "ฉันพร้อม!" รอให้เพื่อนกดพร้อมด้วย แล้วนับถอยหลัง 3...2...1...</li>
+          <li>กดปุ่มใหญ่ให้ได้มากสุดใน 5 วินาที ใครเยอะกว่าชนะ!</li>
+        </ul>
+      </div>
+      <div class="game-status" id="speedStatus">รอเข้าห้อง...</div>
+      <div class="game-players" id="speedPlayers"></div>
+      <div class="speed-score-row" id="speedScoreRow"></div>
+      <div class="speed-timer" id="speedTimer"></div>
+      <button class="speed-tap-btn" id="speedTapBtn" onclick="speedTap()" disabled>👆</button>
+      <div class="mt-12 text-center">
+        <button class="btn btn-green btn-sm" id="speedReadyBtn" onclick="speedReady()" style="display:none">✅ ฉันพร้อม!</button>
+      </div>
+      <div id="speedResultArea"></div>
+      <div class="text-center mt-12" id="speedPlayAgain" style="display:none">
+        <button class="btn btn-gold btn-sm" onclick="resetGame('speed')">🔄 เสมอ — เล่นใหม่</button>
+      </div>
+    </div>
+
+    <!-- GAME 3: STOP THE CLOCK -->
+    <div class="game-room clock-theme" style="margin-bottom:14px;">
+      <h2 style="color:var(--accent);font-size:1.4rem;">⏱️ เกมที่ 3: หยุดตรงเวลา</h2>
+      <div class="instructions" style="margin:10px 0;">
+        <h3>📖 วิธีเล่น</h3>
+        <ul>
+          <li>กด "ฉันพร้อม!" รอให้เพื่อนพร้อมด้วย แล้วแถบจะเริ่มวิ่ง 0→10 วินาที</li>
+          <li>กดหยุดให้ใกล้ 5.00 วินาทีมากที่สุด ใครแม่นกว่าชนะ!</li>
+        </ul>
+      </div>
+      <div class="game-status" id="clockStatus">รอเข้าห้อง...</div>
+      <div class="game-players" id="clockPlayers"></div>
+      <div class="clock-area">
+        <div class="clock-target">🎯 เป้าหมาย: <strong style="color:var(--gold)">5.00</strong> วินาที</div>
+        <div class="clock-track"><div class="clock-bar" id="clockBar" style="width:0%"></div><div class="clock-marker"></div></div>
+        <div class="clock-time-display" id="clockTimeDisplay">0.00</div>
+        <button class="clock-stop-btn" id="clockStopBtn" onclick="clockStop()" disabled>⏹️</button>
+        <div class="mt-12 text-center">
+          <button class="btn btn-accent btn-sm" id="clockReadyBtn" onclick="clockReady()" style="display:none">✅ ฉันพร้อม!</button>
+        </div>
+      </div>
+      <div class="clock-result-row" id="clockResultRow"></div>
+      <div id="clockResultArea"></div>
+      <div class="text-center mt-12" id="clockPlayAgain" style="display:none">
+        <button class="btn btn-gold btn-sm" onclick="resetGame('clock')">🔄 เสมอ — เล่นใหม่</button>
+      </div>
+    </div>
+
+  </div><!-- end tab-games -->
+
+  <!-- BET TAB -->
+  <div id="tab-bet" class="section">
+
+    <!-- LEADERBOARD -->
+    <div class="room-card" style="margin-bottom:14px;">
+      <h2 style="color:var(--gold)">🏆 Leaderboard & 🪙 เหรียญ</h2>
+      <div id="leaderboard-list"><div style="color:#555;text-align:center;padding:16px">เข้าห้องก่อนเพื่อดู leaderboard</div></div>
+    </div>
+
+    <!-- CREATE BET BUTTON -->
+    <div style="text-align:center;margin-bottom:14px;" id="createBetBtnArea">
+      <button class="btn btn-gold" onclick="showCreateBet()">➕ สร้างเดิมพันใหม่</button>
+    </div>
+
+    <!-- CREATE BET FORM -->
+    <div id="createBetForm" style="display:none;margin-bottom:14px;" class="game-room">
+      <h2 style="color:var(--gold);font-size:1.3rem;text-align:center;margin-bottom:14px;">🎲 สร้างเดิมพัน</h2>
+
+      <!-- เลือกกลุ่ม -->
+      <div class="label">เลือกกลุ่ม</div>
+      <select id="betGroupSelect" onchange="renderMatchSelect()" style="width:100%;background:var(--card2);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;color:#fff;font-family:'Sarabun',sans-serif;font-size:.95rem;outline:none;margin-bottom:10px;">
+        <option value="">-- เลือกกลุ่ม --</option>
+        <option value="A">กลุ่ม A</option><option value="B">กลุ่ม B</option><option value="C">กลุ่ม C</option>
+        <option value="D">กลุ่ม D</option><option value="E">กลุ่ม E</option><option value="F">กลุ่ม F</option>
+        <option value="G">กลุ่ม G</option><option value="H">กลุ่ม H</option><option value="I">กลุ่ม I</option>
+        <option value="J">กลุ่ม J</option><option value="K">กลุ่ม K</option><option value="L">กลุ่ม L</option>
+        <option value="KO">รอบน็อคเอาท์ (พิมพ์เอง)</option>
+      </select>
+
+      <div id="matchSelectArea" style="display:none">
+        <div class="label">เลือกคู่แข่ง</div>
+        <select id="betMatchSelect" onchange="updatePickLabels()" style="width:100%;background:var(--card2);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;color:#fff;font-family:'Sarabun',sans-serif;font-size:.9rem;outline:none;margin-bottom:10px;"></select>
+      </div>
+
+      <div id="koMatchArea" style="display:none">
+        <div class="label">พิมพ์ชื่อทีมเจ้าบ้าน</div>
+        <input type="text" id="koHome" placeholder="เช่น อังกฤษ" style="margin-bottom:8px;">
+        <div class="label">พิมพ์ชื่อทีมเยือน</div>
+        <input type="text" id="koAway" placeholder="เช่น ฝรั่งเศส" style="margin-bottom:10px;">
+      </div>
+
+      <!-- ตัวเลือกเดิมพัน (แก้ได้เอง) -->
+      <div class="label">ตั้งชื่อตัวเลือกเดิมพัน <span style="color:#666;font-size:.72rem">(แก้ได้ตามใจ)</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+        <div>
+          <div style="font-size:.7rem;color:#888;margin-bottom:4px;">ตัวเลือก 1</div>
+          <input type="text" id="opt1Label" placeholder="ทีมเจ้าบ้าน" style="width:100%;font-size:.85rem;padding:8px 10px;">
+        </div>
+        <div>
+          <div style="font-size:.7rem;color:#888;margin-bottom:4px;">ตัวเลือก 2</div>
+          <input type="text" id="opt2Label" placeholder="เสมอ" style="width:100%;font-size:.85rem;padding:8px 10px;">
+        </div>
+        <div>
+          <div style="font-size:.7rem;color:#888;margin-bottom:4px;">ตัวเลือก 3</div>
+          <input type="text" id="opt3Label" placeholder="ทีมเยือน" style="width:100%;font-size:.85rem;padding:8px 10px;">
+        </div>
+      </div>
+
+      <!-- คุณทายอะไร -->
+      <div class="label">คุณทายอะไร?</div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;" id="betPickArea">
+        <button class="bet-pick-btn" onclick="setBetPick('opt1')" id="pickOpt1">ตัวเลือก 1</button>
+        <button class="bet-pick-btn" onclick="setBetPick('opt2')" id="pickOpt2">ตัวเลือก 2</button>
+        <button class="bet-pick-btn" onclick="setBetPick('opt3')" id="pickOpt3">ตัวเลือก 3</button>
+      </div>
+
+      <!-- Slider เหรียญ -->
+      <div class="label">จำนวนเหรียญที่วางเดิมพัน 🪙</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+        <input type="range" id="betAmountSlider" min="10" max="1000" step="10" value="100"
+          oninput="document.getElementById('betAmountDisplay').textContent=this.value;document.getElementById('betAmount').value=this.value"
+          style="flex:1;accent-color:var(--gold);">
+        <span id="betAmountDisplay" style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);min-width:60px;text-align:right">100</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:.72rem;color:#555;margin-bottom:14px;">
+        <span>10</span><span>500</span><span>1,000</span>
+      </div>
+      <input type="hidden" id="betAmount" value="100">
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-gold" onclick="submitCreateBet()" style="flex:1">✅ สร้างเดิมพัน</button>
+        <button class="btn btn-gray btn-sm" onclick="hideCreateBet()">ยกเลิก</button>
+      </div>
+    </div>
+
+    <!-- ACTIVE BETS -->
+    <div class="label" style="font-size:.9rem;color:var(--gold);margin-bottom:8px;">📋 รายการเดิมพัน</div>
+    <div id="betsList"><div style="color:#555;text-align:center;padding:20px">ยังไม่มีเดิมพัน</div></div>
+
+    <!-- JOIN BET MODAL -->
+    <div id="joinBetModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9998;align-items:center;justify-content:center;padding:20px;">
+      <div style="background:var(--card);border:1px solid rgba(255,215,0,.2);border-radius:20px;padding:24px;max-width:380px;width:100%;">
+        <h3 style="color:var(--gold);margin-bottom:8px;text-align:center">🎲 เข้าร่วมเดิมพัน</h3>
+        <div id="joinBetInfo" style="color:#aaa;font-size:.88rem;text-align:center;margin-bottom:14px;"></div>
+        <div class="label">เลือกฝั่งของคุณ</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;" id="joinPickArea"></div>
+        <div class="label">จำนวนเหรียญ (ต้องเท่ากับ <span id="joinAmountRequired">0</span> 🪙)</div>
+        <input type="number" id="joinAmount" style="width:100%;margin-bottom:14px;" readonly>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-gold" onclick="submitJoinBet()" style="flex:1">✅ เข้าร่วม</button>
+          <button class="btn btn-gray btn-sm" onclick="closeJoinModal()">ยกเลิก</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end tab-bet -->
+</div><!-- end container -->
+</div><!-- end mainApp -->
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey:"AIzaSyBzWUvd-2SFV6MIn5rvdnInSkcNpfOrcIw",
+  authDomain:"worldcup2026-65dcd.firebaseapp.com",
+  databaseURL:"https://worldcup2026-65dcd-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"worldcup2026-65dcd",
+  storageBucket:"worldcup2026-65dcd.firebasestorage.app",
+  messagingSenderId:"675191771950",
+  appId:"1:675191771950:web:70d1e50ce0403712b4a0bf"
+};
+const db = getDatabase(initializeApp(firebaseConfig));
+const LINE_CLIENT_ID = '2009984025';
+// รองรับทั้ง Thai domain และ punycode
+const LINE_REDIRECT_URI = (window.location.hostname.includes('xn--') || window.location.hostname.includes('github.io'))
+  ? 'https://www.xn--c3cxfd6bb0f9ac0ud.online'
+  : window.location.origin;
+
+const TEAMS = [
+  {g:'A',n:'เม็กซิโก',f:'🇲🇽',e:'Mexico'},{g:'A',n:'แอฟริกาใต้',f:'🇿🇦',e:'South Africa'},{g:'A',n:'เกาหลีใต้',f:'🇰🇷',e:'South Korea'},{g:'A',n:'เชเกีย',f:'🇨🇿',e:'Czechia'},
+  {g:'B',n:'แคนาดา',f:'🇨🇦',e:'Canada'},{g:'B',n:'บอสเนียฯ',f:'🇧🇦',e:'Bosnia'},{g:'B',n:'กาตาร์',f:'🇶🇦',e:'Qatar'},{g:'B',n:'สวิตเซอร์แลนด์',f:'🇨🇭',e:'Switzerland'},
+  {g:'C',n:'บราซิล',f:'🇧🇷',e:'Brazil'},{g:'C',n:'โมร็อกโก',f:'🇲🇦',e:'Morocco'},{g:'C',n:'เฮติ',f:'🇭🇹',e:'Haiti'},{g:'C',n:'สกอตแลนด์',f:'🏴󠁧󠁢󠁳󠁣󠁴󠁿',e:'Scotland'},
+  {g:'D',n:'สหรัฐอเมริกา',f:'🇺🇸',e:'USA'},{g:'D',n:'ปารากวัย',f:'🇵🇾',e:'Paraguay'},{g:'D',n:'ออสเตรเลีย',f:'🇦🇺',e:'Australia'},{g:'D',n:'ตุรกี',f:'🇹🇷',e:'Türkiye'},
+  {g:'E',n:'เยอรมนี',f:'🇩🇪',e:'Germany'},{g:'E',n:'กือราเซา',f:'🇨🇼',e:'Curaçao'},{g:'E',n:'ไอวอรี่โคสต์',f:'🇨🇮',e:'Ivory Coast'},{g:'E',n:'เอกวาดอร์',f:'🇪🇨',e:'Ecuador'},
+  {g:'F',n:'เนเธอร์แลนด์',f:'🇳🇱',e:'Netherlands'},{g:'F',n:'ญี่ปุ่น',f:'🇯🇵',e:'Japan'},{g:'F',n:'สวีเดน',f:'🇸🇪',e:'Sweden'},{g:'F',n:'ตูนิเซีย',f:'🇹🇳',e:'Tunisia'},
+  {g:'G',n:'เบลเยียม',f:'🇧🇪',e:'Belgium'},{g:'G',n:'อียิปต์',f:'🇪🇬',e:'Egypt'},{g:'G',n:'อิหร่าน',f:'🇮🇷',e:'Iran'},{g:'G',n:'นิวซีแลนด์',f:'🇳🇿',e:'New Zealand'},
+  {g:'H',n:'สเปน',f:'🇪🇸',e:'Spain'},{g:'H',n:'เคปเวิร์ด',f:'🇨🇻',e:'Cape Verde'},{g:'H',n:'ซาอุดีอาระเบีย',f:'🇸🇦',e:'Saudi Arabia'},{g:'H',n:'อุรุกวัย',f:'🇺🇾',e:'Uruguay'},
+  {g:'I',n:'ฝรั่งเศส',f:'🇫🇷',e:'France'},{g:'I',n:'เซเนกัล',f:'🇸🇳',e:'Senegal'},{g:'I',n:'นอร์เวย์',f:'🇳🇴',e:'Norway'},{g:'I',n:'อิรัก',f:'🇮🇶',e:'Iraq'},
+  {g:'J',n:'อาร์เจนตินา',f:'🇦🇷',e:'Argentina'},{g:'J',n:'แอลจีเรีย',f:'🇩🇿',e:'Algeria'},{g:'J',n:'ออสเตรีย',f:'🇦🇹',e:'Austria'},{g:'J',n:'จอร์แดน',f:'🇯🇴',e:'Jordan'},
+  {g:'K',n:'โปรตุเกส',f:'🇵🇹',e:'Portugal'},{g:'K',n:'DR คองโก',f:'🇨🇩',e:'DR Congo'},{g:'K',n:'อุซเบกิสถาน',f:'🇺🇿',e:'Uzbekistan'},{g:'K',n:'โคลอมเบีย',f:'🇨🇴',e:'Colombia'},
+  {g:'L',n:'อังกฤษ',f:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',e:'England'},{g:'L',n:'โครเอเชีย',f:'🇭🇷',e:'Croatia'},{g:'L',n:'กาน่า',f:'🇬🇭',e:'Ghana'},{g:'L',n:'ปานามา',f:'🇵🇦',e:'Panama'},
+];
+
+// STATE
+let myUser=null, roomCode='', mySelection=null, confirmedTeam=null, roomData={}, unsubscribe=null, currentGame=null;
+let speedInterval=null, speedMyCount=0, speedRunning=false;
+let clockInterval=null, clockStart=null, clockRunning=false, clockStopped=false;
+
+// TOAST
+window.toast=(msg,dur=2800)=>{const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);};
+
+// LINE LOGIN
+window.loginWithLine=()=>{
+  const state='baan_'+Math.random().toString(36).slice(2);
+  sessionStorage.setItem('ls',state);
+  const p=new URLSearchParams(window.location.search);
+  if(p.get('room')) sessionStorage.setItem('pr',p.get('room'));
+  const u=new URL('https://access.line.me/oauth2/v2.1/authorize');
+  u.searchParams.set('response_type','code');u.searchParams.set('client_id',LINE_CLIENT_ID);
+  u.searchParams.set('redirect_uri',LINE_REDIRECT_URI);u.searchParams.set('state',state);u.searchParams.set('scope','profile openid');
+  window.location.href=u.toString();
+};
+async function handleLineCallback(code){
+  toast('🔄 กำลัง Login...');
+  try{
+    const p=new URLSearchParams();p.append('grant_type','authorization_code');p.append('code',code);p.append('redirect_uri',LINE_REDIRECT_URI);p.append('client_id',LINE_CLIENT_ID);p.append('client_secret','71038c410e10987c82de935be67ae40d');
+    const res=await fetch('https://api.line.me/oauth2/v2.1/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p});
+    const data=await res.json();
+    if(data.access_token){
+      const pr=await fetch('https://api.line.me/v2/profile',{headers:{'Authorization':'Bearer '+data.access_token}});
+      const prof=await pr.json();
+      myUser={uid:prof.userId,name:prof.displayName,avatar:prof.pictureUrl||''};
+      localStorage.setItem('lu',JSON.stringify(myUser));showApp();
+    }else toast('❌ Login ไม่สำเร็จ');
+  }catch(e){toast('❌ Error: '+e.message);}
+  window.history.replaceState({},'',(LINE_REDIRECT_URI));
+}
+function showApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('mainApp').style.display='block';
+  document.getElementById('userName').textContent=myUser.name;
+  document.getElementById('userAvatar').src=myUser.avatar||'';
+  watchLobby();
+  const p=new URLSearchParams(window.location.search);
+  const room=p.get('room')||sessionStorage.getItem('pr')||localStorage.getItem('lrc');
+  sessionStorage.removeItem('pr');
+  if(room){document.getElementById('roomInput').value=room.toUpperCase();joinRoom();}
+}
+window.logout=()=>{localStorage.removeItem('lu');localStorage.removeItem('lrc');myUser=null;roomCode='';mySelection=null;confirmedTeam=null;if(unsubscribe)unsubscribe();clearInterval(speedInterval);clearInterval(clockInterval);document.getElementById('loginScreen').style.display='flex';document.getElementById('mainApp').style.display='none';};
+
+// TABS
+window.switchTab=(tab)=>{
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn')[{pick:0,results:1,games:2,bet:3}[tab]].classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='games') updateAllGamesUI();
+  if(tab==='bet') renderBetTab();
+};
+
+// ROOM
+const genCode=()=>Math.random().toString(36).toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6).padEnd(6,'X');
+window.createRoom=async()=>{if(!myUser)return;roomCode=genCode();await set(ref(db,'rooms/'+roomCode),{members:{},gs:{}});await initRoom();};
+window.joinRoom=async()=>{if(!myUser)return;const c=document.getElementById('roomInput').value.trim().toUpperCase();if(c.length<6){toast('⚠️ รหัสต้อง 6 ตัว');return;}roomCode=c;await initRoom();};
+const DEADLINE = new Date('2026-05-17T23:59:59+07:00').getTime(); // วันหมดเขต 17 พ.ค. 2026
+function isPastDeadline(){ return Date.now() > DEADLINE; }
+function deadlineText(){ return isPastDeadline() ? '🔒 หมดเขตเลือกทีม 17 พ.ค. 2026 แล้ว' : '⏰ เปลี่ยนทีมได้ถึง 17 พ.ค. 2026'; }
+
+async function initRoom(){
+  localStorage.setItem('lrc', roomCode);
+  // ดึงข้อมูล member เดิมก่อน ไม่ reset team
+  const snap0 = await new Promise(res=>{ const u=onValue(ref(db,'rooms/'+roomCode+'/members/'+myUser.uid),s=>{u();res(s);}); });
+  const existing = snap0.val();
+  const teamToKeep = existing?.team || null;
+  await update(ref(db,'rooms/'+roomCode+'/members/'+myUser.uid),{uid:myUser.uid,name:myUser.name,avatar:myUser.avatar,team:teamToKeep,confirmedAt:existing?.confirmedAt||null});
+  if(unsubscribe)unsubscribe();
+  unsubscribe=onValue(ref(db,'rooms/'+roomCode),snap=>{
+    roomData=snap.val()||{};
+    const me=roomData.members?.[myUser.uid];
+    if(me?.team){ confirmedTeam=me.team; mySelection=me.team; }
+    renderAll();updateAllGamesUI();
+    updateRoomMeta();
+    if(document.getElementById('tab-bet')?.classList.contains('active')) renderBetTab();
+  });
+  document.getElementById('setup-area').style.display='none';
+  document.getElementById('room-info-area').style.display='block';
+  document.getElementById('team-selector').style.display='block';
+  document.getElementById('roomCodeDisplay').textContent=roomCode;
+  const link=LINE_REDIRECT_URI+'?room='+roomCode;
+  document.getElementById('shareLinkEl').textContent=link;document.getElementById('shareLinkEl').dataset.link=link;
+  initPresence();
+  toast('✅ เข้าห้อง '+roomCode+' แล้ว!');
+}
+window.copyLink=()=>{const l=document.getElementById('shareLinkEl').dataset.link;navigator.clipboard?.writeText(l).then(()=>toast('📋 คัดลอกแล้ว!'));};
+window.resetRoom=async()=>{if(!roomCode||!confirm('รีเซ็ตทั้งหมด?'))return;await set(ref(db,'rooms/'+roomCode),{members:{},gs:{}});await update(ref(db,'rooms/'+roomCode+'/members/'+myUser.uid),{uid:myUser.uid,name:myUser.name,avatar:myUser.avatar,team:null});mySelection=null;confirmedTeam=null;toast('🔄 รีเซ็ตแล้ว!');};
+
+// HELPERS
+function getConflicts(members){const m={};Object.values(members).forEach(mb=>{if(mb.team){if(!m[mb.team])m[mb.team]=[];m[mb.team].push(mb);}});return Object.entries(m).filter(([,mb])=>mb.length>1).map(([team,mb])=>({team,members:mb}));}
+function getMyConflict(){return getConflicts(roomData.members||{}).find(c=>c.members.some(m=>m.uid===myUser?.uid));}
+function td(en){return TEAMS.find(t=>t.e===en);}
+
+// RENDER ALL
+function renderAll(){
+  const members=roomData.members||{};
+  const conflicts=getConflicts(members);
+  const cTeams=new Set(conflicts.map(c=>c.team));
+  document.getElementById('memberCount').textContent=Object.keys(members).length;
+  document.getElementById('membersList').innerHTML=Object.values(members).map(m=>{
+    const ht=!!m.team,ic=ht&&cTeams.has(m.team);
+    const t=ht?TEAMS.find(x=>x.e===m.team):null;
+    return `<div class="member-chip ${ht?'has-team':''} ${ic?'conflict':''}">${m.avatar?`<img src="${m.avatar}" alt="">`:''}${ic?'⚠️':ht?'✅':'⏳'} ${m.name}${t?` <span>${t.f}</span>`:''}</div>`;
+  }).join('');
+  const myC=getMyConflict();
+  if(myC){const t=TEAMS.find(x=>x.e===myC.team);const oth=myC.members.filter(m=>m.uid!==myUser.uid).map(m=>m.name).join(', ');document.getElementById('conflict-area').style.display='block';document.getElementById('conflictMsg').textContent=`คุณและ ${oth} ต่างเลือก ${t?t.f+' ':''} ${myC.team}`;}
+  else document.getElementById('conflict-area').style.display='none';
+  renderTeams(members,cTeams);renderResults(members,conflicts);
+  // deadline banner
+  const db2=document.getElementById('deadlineBanner');
+  const cta=document.getElementById('changeTeamArea');
+  if(db2) db2.textContent=deadlineText();
+  if(cta) cta.style.display=(confirmedTeam && !isPastDeadline())?'block':'none';
+  updateAllGamesUI();
+}
+
+function renderTeams(members,cTeams){
+  const tm={};Object.values(members).forEach(m=>{if(m.team){if(!tm[m.team])tm[m.team]=[];tm[m.team].push(m);}});
+  const groups=[...new Set(TEAMS.map(t=>t.g))];
+  document.getElementById('groups-container').innerHTML=groups.map(g=>`
+    <div class="group-header"><span class="group-label">กลุ่ม ${g}</span><div class="group-line"></div></div>
+    <div class="teams-grid">${TEAMS.filter(t=>t.g===g).map(t=>{
+      const takers=tm[t.e]||[],isMine=takers.some(m=>m.uid===myUser.uid),byOth=takers.filter(m=>m.uid!==myUser.uid);
+      // ล็อคทีมเฉพาะหลังหมดเขต หรือถ้าคุณมีทีมแล้วและไม่ใช่ทีมนี้หลังหมดเขต
+      const isTaken=byOth.length>0 && !isMine && isPastDeadline();
+      // ก่อนหมดเขต: กดทีมที่มีคนอื่นเลือกได้ (จะเกิด conflict → แข่งเกม)
+      const isClickable = !isPastDeadline() || !byOth.length || isMine;
+      const isConflict=isMine&&cTeams.has(t.e);
+      const isSel=mySelection===t.e&&!confirmedTeam,isConf=confirmedTeam===t.e;
+      let cls='team-card';if(isSel||isConf)cls+=' selected';if(isTaken)cls+=' taken';if(isConflict)cls+=' conflict-team';
+      // แสดง badge "ท้าแข่ง" ถ้ามีคนอื่นเลือกอยู่และยังไม่หมดเขต
+      const challengeBadge=byOth.length>0&&!isMine&&!isPastDeadline()?`<div class="team-sub" style="color:var(--accent)">⚡ ท้าแข่ง!</div>`:'';
+      const picks=takers.length>0?`<div class="team-pickers">${takers.map(m=>m.avatar?`<img class="picker-av" src="${m.avatar}" title="${m.name}">`:``).join('')}<span class="picker-names">${takers.map(m=>m.name).join(', ')}</span></div>`:'';
+      return `<div class="${cls}" onclick="${isClickable?`selectTeam('${t.e}')`:''}" ><span class="team-flag">${t.f}</span><div class="team-info"><div class="team-name">${t.n}</div><div class="team-sub">กลุ่ม ${t.g}</div>${isConflict?`<div class="team-sub" style="color:var(--red)">⚠️ ซ้ำ — แข่งเกม!</div>`:''}${isMine&&isConf&&!isConflict?`<div class="team-sub" style="color:var(--green)">✅ ทีมคุณ</div>`:''}${challengeBadge}${picks}</div>${isSel||isConf?'<span class="check-icon">✓</span>':''}</div>`;
+    }).join('')}</div>`).join('');
+  renderSummary(tm,cTeams);
+}
+
+function renderSummary(tm,cTeams){
+  const entries=Object.entries(tm);const panel=document.getElementById('summary-panel');
+  if(!entries.length){panel.style.display='none';return;}panel.style.display='block';
+  document.getElementById('summary-grid').innerHTML=entries.map(([en,takers])=>{
+    const t=TEAMS.find(x=>x.e===en),isMine=takers.some(m=>m.uid===myUser.uid),isClash=cTeams.has(en);
+    return `<div class="sum-item ${isMine&&!isClash?'mine':''} ${isClash?'clash':''}"><span class="sum-flag">${t?t.f:'🏳️'}</span><div class="sum-info"><div class="sum-team">${t?t.n:en} ${isClash?'⚠️':''}</div>${takers.map(m=>`<div class="sum-picker">${m.avatar?`<img src="${m.avatar}" alt="">`:'<span>👤</span>'}<span>${m.name}${m.uid===myUser.uid?' (คุณ)':''}</span></div>`).join('')}</div></div>`;
+  }).join('');
+}
+
+function renderResults(members,conflicts){
+  const cTeams=new Set(conflicts.map(c=>c.team));
+  const gs=roomData.gs||{};const allWins=[...Object.values(gs.rr||{}),...Object.values(gs.sr||{}),...Object.values(gs.cr||{})];
+  const confirmed=Object.values(members).filter(m=>m.team);const list=document.getElementById('results-list');
+  if(!confirmed.length){list.innerHTML='<div style="color:#555;text-align:center;padding:28px 0">ยังไม่มีการยืนยันทีม...</div>';return;}
+  list.innerHTML=confirmed.map(m=>{const t=TEAMS.find(x=>x.e===m.team),ic=cTeams.has(m.team),win=allWins.find(r=>r.uid===m.uid&&r.team===m.team);
+    return `<div class="result-item">${m.avatar?`<img src="${m.avatar}" alt="">`:'<span style="font-size:1.4rem">👤</span>'}<span style="font-size:1.4rem">${t?t.f:'🏳️'}</span><div style="flex:1"><div style="font-weight:700">${m.name}</div><div style="font-size:.83rem;color:#999">${t?t.n:m.team} ${ic?'⚠️':''}</div>${win?`<div style="font-size:.72rem;color:#666">🏆 ${win.game}</div>`:''}</div>${win?'<span style="color:var(--accent)">🏆</span>':''}</div>`;
+  }).join('');
+}
+
+// TEAM SELECT
+window.selectTeam=(en)=>{
+  if(!roomCode) return;
+  if(isPastDeadline() && confirmedTeam){ toast('🔒 หมดเขตเปลี่ยนทีมแล้ว (17 พ.ค. 2026)'); return; }
+  // ถ้าทีมนี้มีคนอื่นเลือกแล้ว แต่ยังไม่หมดเขต → อนุญาตให้เลือกซ้ำได้ (จะแข่งเกมตัดสิน)
+  mySelection=en;
+  document.getElementById('confirmBtn').style.display='inline-block';
+  document.getElementById('confirmBtn').textContent = confirmedTeam && confirmedTeam!==en ? '🔄 เปลี่ยนทีมนี้!' : '✅ ยืนยัน!';
+  renderTeams(roomData.members||{},new Set(getConflicts(roomData.members||{}).map(c=>c.team)));
+};
+window.confirmTeam=async()=>{
+  if(!mySelection) return;
+  if(isPastDeadline() && confirmedTeam){ toast('🔒 หมดเขตเปลี่ยนทีมแล้ว'); return; }
+  confirmedTeam=mySelection;
+  await update(ref(db,'rooms/'+roomCode+'/members/'+myUser.uid),{team:confirmedTeam,confirmedAt:Date.now()});
+  const t=TEAMS.find(x=>x.e===confirmedTeam);
+  toast(`${t.f} ยืนยันแล้ว! เชียร์ ${t.n}!`);
+  document.getElementById('confirmBtn').style.display='none';
+};
+
+window.changeTeam=()=>{
+  if(isPastDeadline()){ toast('🔒 หมดเขตเปลี่ยนทีมแล้ว (17 พ.ค. 2026)'); return; }
+  confirmedTeam=null; mySelection=null;
+  document.getElementById('confirmBtn').style.display='none';
+  document.getElementById('changeTeamArea').style.display='none';
+  renderTeams(roomData.members||{},new Set(getConflicts(roomData.members||{}).map(c=>c.team)));
+  toast('🔄 เลือกทีมใหม่ได้เลย!');
+};
+
+// ===== ROOM LOBBY & ONLINE PRESENCE =====
+let lobbyUnsub=null;
+function initPresence(){
+  if(!roomCode||!myUser)return;
+  const presRef=ref(db,'rooms/'+roomCode+'/online/'+myUser.uid);
+  update(presRef,{uid:myUser.uid,name:myUser.name,avatar:myUser.avatar||'',at:Date.now()});
+  // onDisconnect via REST workaround — ใช้ update ทับเป็น null เมื่อ logout
+  update(ref(db,'roomList/'+roomCode),{code:roomCode,ownerName:myUser.name,ownerAvatar:myUser.avatar||'',updatedAt:Date.now()});
+}
+function watchLobby(){
+  if(lobbyUnsub)return;
+  lobbyUnsub=onValue(ref(db,'roomList'),snap=>{
+    renderRoomLobby(snap.val()||{});
+  });
+}
+function renderRoomLobby(rooms){
+  const list=document.getElementById('roomLobbyList');if(!list)return;
+  const entries=Object.entries(rooms).sort((a,b)=>b[1].updatedAt-a[1].updatedAt);
+  if(!entries.length){list.innerHTML='<div style="color:#555;font-size:.85rem;text-align:center;padding:12px">ยังไม่มีห้อง — สร้างห้องใหม่ได้เลย!</div>';return;}
+  list.innerHTML=entries.map(([code,room])=>{
+    const isMyRoom=code===roomCode;
+    const onlineCnt=room.onlineCount||0;
+    const memberCnt=room.memberCount||0;
+    return `<div class="lobby-item ${isMyRoom?'myroom':''}" onclick="prefillRoom('${code}')">
+      <div style="flex:1">
+        <div class="lobby-name">🏠 ห้องของ ${room.ownerName||code} ${isMyRoom?'<span style="font-size:.7rem;color:var(--gold)">(ห้องคุณ)</span>':''}</div>
+        <div class="lobby-meta">สมาชิก ${memberCnt} คน · ต้องใส่รหัสเพื่อเข้า</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="lobby-online"><span class="lobby-dot"></span>${onlineCnt} ออนไลน์</div>
+        <div style="font-size:.68rem;color:#555;margin-top:2px">รหัส: ${code}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+window.prefillRoom=(code)=>{
+  document.getElementById('roomInput').value=code;
+  toast('💡 ใส่รหัสแล้ว — กด "เข้าร่วม" หรือขอรหัสจากเจ้าของห้อง');
+};
+function updateRoomMeta(){
+  if(!roomCode)return;
+  const members=roomData.members||{};
+  const online=roomData.online||{};
+  update(ref(db,'roomList/'+roomCode),{memberCount:Object.keys(members).length,onlineCount:Object.keys(online).length});
+}
+
+function updateAllGamesUI(){
+  if(!myUser) return;
+  const myC=getMyConflict();
+  const t=myC?TEAMS.find(x=>x.e===myC.team):null;
+  const opp=myC?myC.members.find(m=>m.uid!==myUser.uid):null;
+
+  // conflict info header
+  document.getElementById('gameConflictInfo').textContent = myC
+    ? `ทีมซ้ำ: ${t?t.f+' '+t.n:myC.team} — คุณ vs ${opp?.name}`
+    : (roomCode?'ไม่มีทีมซ้ำ ✅':'เข้าห้องและเลือกทีมให้ซ้ำกับเพื่อนก่อน');
+
+  if(!myC){ document.getElementById('scoreboard').style.display='none'; updateRPS(); updateSpeed(); updateClock(); return; }
+
+  // คำนวณคะแนน
+  const gs=roomData.gs||{};
+  const rr=Object.values(gs.rr||{}),sr=Object.values(gs.sr||{}),cr=Object.values(gs.cr||{});
+  const myWins=[...rr,...sr,...cr].filter(r=>r.uid===myUser.uid&&r.team===myC.team).length;
+  const oppWins=[...rr,...sr,...cr].filter(r=>r.uid===opp?.uid&&r.team===myC.team).length;
+
+  // แสดง scoreboard
+  document.getElementById('scoreboard').style.display='block';
+  document.getElementById('sbMeAvatar').textContent=myUser.avatar?'':'👤';
+  if(myUser.avatar) document.getElementById('sbMeAvatar').innerHTML=`<img src="${myUser.avatar}" style="width:36px;height:36px;border-radius:50%;border:2px solid var(--line);">`;
+  document.getElementById('sbMeName').textContent=myUser.name+' (คุณ)';
+  document.getElementById('sbMeScore').textContent=myWins;
+  document.getElementById('sbMeScore').style.color=myWins>oppWins?'var(--green)':'var(--gold)';
+  if(opp?.avatar) document.getElementById('sbOppAvatar').innerHTML=`<img src="${opp.avatar}" style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,.2);">`;
+  document.getElementById('sbOppName').textContent=opp?.name||'...';
+  document.getElementById('sbOppScore').textContent=oppWins;
+  document.getElementById('sbOppScore').style.color=oppWins>myWins?'var(--green)':'#aaa';
+
+  // game status badges
+  const gameLabels=[
+    {key:'rr',icon:'✊',name:'เป่ายิงฉุบ'},
+    {key:'sr',icon:'👆',name:'กดปุ่มเร็ว'},
+    {key:'cr',icon:'⏱️',name:'หยุดตรงเวลา'},
+  ];
+  document.getElementById('gameStatusRow').innerHTML=gameLabels.map(g=>{
+    const wins=Object.values(gs[g.key]||{});
+    const myW=wins.find(r=>r.uid===myUser.uid&&r.team===myC.team);
+    const oppW=wins.find(r=>r.uid===opp?.uid&&r.team===myC.team);
+    const color=myW?'var(--green)':oppW?'var(--red)':'#555';
+    const label=myW?'คุณชนะ':oppW?`${opp.name}ชนะ`:'ยังไม่จบ';
+    return `<div style="background:var(--card2);border:1px solid ${color};border-radius:10px;padding:6px 12px;font-size:.78rem;text-align:center;color:${color}">${g.icon} ${g.name}<br><strong>${label}</strong></div>`;
+  }).join('');
+
+  // ตรวจ 2 ใน 3
+  const finalArea=document.getElementById('finalResultArea');
+  if(myWins>=2||oppWins>=2){
+    const iWon=myWins>=2;
+    finalArea.innerHTML=`<div class="game-result ${iWon?'win':'lose'}" style="margin-top:14px;">
+      <span class="gr-emoji">${iWon?'🏆':'😢'}</span>
+      <h3 style="color:${iWon?'var(--green)':'var(--red)'}">${iWon?'🎉 คุณชนะ 2 ใน 3!':'😢 คุณแพ้ 2 ใน 3'}</h3>
+      <p style="color:#999">${iWon?myUser.name:opp?.name} ได้สิทธิ์เชียร์ ${t?t.f+' '+t.n:myC.team}!</p>
+    </div>`;
+    document.getElementById('resetAllArea').style.display='block';
+    if(iWon) recordFinalWin(myUser.uid, myUser.name, myC);
+    else recordFinalWin(opp.uid, opp.name, myC);
+  } else {
+    finalArea.innerHTML='';
+    document.getElementById('resetAllArea').style.display='none';
+  }
+
+  updateRPS(); updateSpeed(); updateClock();
+}
+
+async function recordFinalWin(wuid,wname,conflict){
+  const gs=roomData.gs||{};
+  if(gs.finalWinner) return; // บันทึกแล้ว
+  if(wuid===myUser.uid){
+    await update(ref(db,'rooms/'+roomCode+'/gs'),{finalWinner:{uid:wuid,name:wname,team:conflict.team,at:Date.now()}});
+    const updates={};
+    conflict.members.forEach(m=>{if(m.uid!==wuid)updates['rooms/'+roomCode+'/members/'+m.uid+'/team']=null;});
+    if(Object.keys(updates).length)await update(ref(db),updates);
+  }
+}
+
+window.resetAllGames=async()=>{
+  if(!roomCode||!confirm('รีเซ็ตแข่งใหม่ทั้งหมด?'))return;
+  clearInterval(speedInterval);clearInterval(clockInterval);speedRunning=false;clockRunning=false;clockStopped=false;speedMyCount=0;
+  await update(ref(db,'rooms/'+roomCode+'/gs'),{rs:null,sp:null,cl:null,rr:null,sr:null,cr:null,finalWinner:null});
+  document.getElementById('rpsResultArea').innerHTML=''; document.getElementById('rpsPlayAgain').style.display='none';
+  document.getElementById('speedResultArea').innerHTML=''; document.getElementById('speedPlayAgain').style.display='none';
+  document.getElementById('speedTimer').textContent=''; document.getElementById('speedTapBtn').disabled=true;
+  document.getElementById('clockResultArea').innerHTML=''; document.getElementById('clockResultRow').innerHTML='';
+  document.getElementById('clockPlayAgain').style.display='none'; document.getElementById('clockBar').style.width='0%';
+  document.getElementById('clockTimeDisplay').textContent='0.00'; document.getElementById('clockStopBtn').disabled=true;
+  toast('🔄 รีเซ็ตแล้ว เริ่มแข่งใหม่!');
+};
+
+// ===== RPS =====
+const RE={rock:'✊',paper:'🖐',scissors:'✌️'},RN={rock:'กำปั้น',paper:'กระดาษ',scissors:'กรรไกร'},RW={rock:'scissors',paper:'rock',scissors:'paper'};
+function updateRPS(){
+  const myC=getMyConflict();if(!myC){document.getElementById('rpsStatus').textContent='ไม่มีทีมซ้ำ ✅';['rpsRock','rpsPaper','rpsScissors'].forEach(id=>document.getElementById(id).disabled=true);return;}
+  const opp=myC.members.find(m=>m.uid!==myUser.uid);
+  const rs=(roomData.gs||{}).rs||{};
+  document.getElementById('rpsPlayers').innerHTML=myC.members.map(m=>`<div class="gp-chip ${rs[m.uid]?'ready':''}">${m.avatar?`<img src="${m.avatar}" alt="">`:''}${m.name} ${rs[m.uid]?'✅':'⏳'}</div>`).join('');
+  const myMove=rs[myUser.uid],allMoved=myC.members.every(m=>rs[m.uid]);
+  // ถ้าเกมนี้มีผลแล้ว (บันทึกใน rr) ไม่ต้องเล่นซ้ำ
+  const rr=Object.values((roomData.gs||{}).rr||{});
+  const gameFinished=rr.find(r=>r.team===myC.team);
+  if(gameFinished){document.getElementById('rpsStatus').textContent=gameFinished.uid===myUser.uid?'✅ คุณชนะเกมนี้!':'❌ คุณแพ้เกมนี้';['rpsRock','rpsPaper','rpsScissors'].forEach(id=>document.getElementById(id).disabled=true);return;}
+  if(allMoved){document.getElementById('rpsStatus').textContent='🎯 ผลการเป่า!';['rpsRock','rpsPaper','rpsScissors'].forEach(id=>document.getElementById(id).disabled=true);document.getElementById('rpsWaiting').style.display='none';showRPSResult(myC,rs);}
+  else if(myMove){document.getElementById('rpsStatus').textContent=`คุณเลือก ${RE[myMove]} แล้ว — รออีกฝ่าย...`;document.getElementById('rpsWaiting').style.display='block';['rpsRock','rpsPaper','rpsScissors'].forEach(id=>document.getElementById(id).disabled=true);document.getElementById('rps'+myMove[0].toUpperCase()+myMove.slice(1)).classList.add('chosen');}
+  else{document.getElementById('rpsStatus').textContent='เลือกมือของคุณ!';document.getElementById('rpsWaiting').style.display='none';['rpsRock','rpsPaper','rpsScissors'].forEach(id=>{const el=document.getElementById(id);el.disabled=false;el.classList.remove('chosen');});document.getElementById('rpsResultArea').innerHTML='';document.getElementById('rpsPlayAgain').style.display='none';}
+}
+window.chooseRPS=async(c)=>{if(!roomCode)return;await update(ref(db,'rooms/'+roomCode+'/gs/rs'),{[myUser.uid]:c});toast(`${RE[c]} เลือก ${RN[c]}!`);};
+async function showRPSResult(conflict,rs){
+  const opp=conflict.members.find(m=>m.uid!==myUser.uid);
+  const mm=rs[myUser.uid],om=rs[opp.uid];const t=TEAMS.find(x=>x.e===conflict.team);
+  let out,wuid,wname;
+  if(mm===om)out='draw';else if(RW[mm]===om){out='win';wuid=myUser.uid;wname=myUser.name;}else{out='lose';wuid=opp.uid;wname=opp.name;}
+  let html=`<div class="vs-display"><div class="player-choice"><span class="ce">${RE[mm]}</span><div class="cn">${myUser.name}</div></div><span class="vs-text">VS</span><div class="player-choice"><span class="ce">${RE[om]}</span><div class="cn">${opp.name}</div></div></div>`;
+  if(out==='draw'){html+=`<div class="game-result draw"><span class="gr-emoji">🤝</span><h3 style="color:var(--gold)">เสมอ! เล่นใหม่!</h3></div>`;document.getElementById('rpsPlayAgain').style.display='block';}
+  else{const w=out==='win';html+=`<div class="game-result ${out}"><span class="gr-emoji">${w?'🏆':'😢'}</span><h3 style="color:${w?'var(--green)':'var(--red)'}">${w?'🎉 คุณชนะ!':'😢 คุณแพ้'}</h3><p style="color:#999">${wname} ได้สิทธิ์เชียร์ ${t?t.f+' '+t.n:conflict.team}!</p></div>`;await recordWin(wuid,wname,conflict,'เป่ายิงฉุบ','rr');}
+  document.getElementById('rpsResultArea').innerHTML=html;
+}
+
+// ===== SPEED CLICK =====
+function updateSpeed(){
+  const myC=getMyConflict();if(!myC){document.getElementById('speedStatus').textContent='ไม่มีทีมซ้ำ ✅';document.getElementById('speedReadyBtn').style.display='none';return;}
+  const opp=myC.members.find(m=>m.uid!==myUser.uid);
+  // ถ้าเกมนี้จบแล้ว
+  const sr=Object.values((roomData.gs||{}).sr||{});
+  const gameFinished=sr.find(r=>r.team===myC.team);
+  if(gameFinished){document.getElementById('speedStatus').textContent=gameFinished.uid===myUser.uid?'✅ คุณชนะเกมนี้!':'❌ คุณแพ้เกมนี้';document.getElementById('speedReadyBtn').style.display='none';document.getElementById('speedTapBtn').disabled=true;return;}
+  const sp=(roomData.gs||{}).sp||{};
+  const mr=sp['r_'+myUser.uid],or=opp&&sp['r_'+opp.uid],started=sp.started,ended=sp.ended;
+  document.getElementById('speedPlayers').innerHTML=myC.members.map(m=>`<div class="gp-chip ${sp['r_'+m.uid]?'ready':''}">${m.avatar?`<img src="${m.avatar}" alt="">`:''}${m.name} ${sp['r_'+m.uid]?'✅':'⏳'}</div>`).join('');
+  const ms=sp['s_'+myUser.uid]||0,os=opp?(sp['s_'+opp.uid]||0):0;
+  document.getElementById('speedScoreRow').innerHTML=`<div class="speed-score-box mine"><div class="sc-name">${myUser.name} (คุณ)</div><div class="sc-num">${ms}</div></div><div class="speed-score-box"><div class="sc-name">${opp?opp.name:'...'}</div><div class="sc-num">${os}</div></div>`;
+  if(ended&&!speedRunning){showSpeedResult(myC,sp);document.getElementById('speedReadyBtn').style.display='none';document.getElementById('speedTapBtn').disabled=true;}
+  else if(started&&!ended&&!speedRunning){startSpeedGame(myC,sp);}
+  else if(!started){
+    document.getElementById('speedStatus').textContent=mr?'รออีกฝ่ายพร้อม...':'กด "ฉันพร้อมแล้ว!" เพื่อเริ่ม';
+    document.getElementById('speedReadyBtn').style.display=mr?'none':'inline-block';
+    document.getElementById('speedTapBtn').disabled=true;document.getElementById('speedTimer').textContent='';document.getElementById('speedResultArea').innerHTML='';document.getElementById('speedPlayAgain').style.display='none';
+    if(mr&&or&&!started)startSpeedCountdown(myC);
+  }
+}
+window.speedReady=async()=>{if(!roomCode)return;await update(ref(db,'rooms/'+roomCode+'/gs/sp'),{['r_'+myUser.uid]:true});document.getElementById('speedReadyBtn').style.display='none';document.getElementById('speedStatus').textContent='รออีกฝ่ายพร้อม...';};
+async function startSpeedCountdown(conflict){const st=Date.now()+3500;await update(ref(db,'rooms/'+roomCode+'/gs/sp'),{cd:st});runSpeedCD(st);}
+function runSpeedCD(st){let iv=setInterval(()=>{const r=Math.ceil((st-Date.now())/1000);if(r>0)document.getElementById('speedTimer').textContent=r+'...';else{clearInterval(iv);document.getElementById('speedTimer').textContent='';update(ref(db,'rooms/'+roomCode+'/gs/sp'),{started:true,startTime:Date.now()});}},200);}
+function startSpeedGame(conflict,sp){if(speedRunning)return;speedRunning=true;speedMyCount=0;document.getElementById('speedTapBtn').disabled=false;document.getElementById('speedStatus').textContent='⚡ กดเร็วๆ!';const end=(sp.startTime||Date.now())+5000;
+  speedInterval=setInterval(async()=>{const r=Math.max(0,(end-Date.now())/1000);document.getElementById('speedTimer').textContent=r.toFixed(1)+'s';if(r<=0){clearInterval(speedInterval);speedRunning=false;document.getElementById('speedTapBtn').disabled=true;document.getElementById('speedTimer').textContent='⏰ หมดเวลา!';await update(ref(db,'rooms/'+roomCode+'/gs/sp'),{ended:true,['s_'+myUser.uid]:speedMyCount});}},100);}
+window.speedTap=async()=>{if(!speedRunning)return;speedMyCount++;await update(ref(db,'rooms/'+roomCode+'/gs/sp'),{['s_'+myUser.uid]:speedMyCount});};
+async function showSpeedResult(conflict,sp){
+  const opp=conflict.members.find(m=>m.uid!==myUser.uid);
+  const ms=sp['s_'+myUser.uid]||0,os=opp?(sp['s_'+opp.uid]||0):0;const t=TEAMS.find(x=>x.e===conflict.team);
+  let out,wuid,wname;
+  if(ms===os)out='draw';else if(ms>os){out='win';wuid=myUser.uid;wname=myUser.name;}else{out='lose';wuid=opp.uid;wname=opp.name;}
+  let html='';
+  if(out==='draw'){html=`<div class="game-result draw"><span class="gr-emoji">🤝</span><h3 style="color:var(--gold)">เสมอ! (${ms} vs ${os})</h3><p style="color:#999">เล่นใหม่!</p></div>`;document.getElementById('speedPlayAgain').style.display='block';}
+  else{const w=out==='win';html=`<div class="game-result ${out}"><span class="gr-emoji">${w?'🏆':'😢'}</span><h3 style="color:${w?'var(--green)':'var(--red)'}">${w?'🎉 คุณชนะ!':'😢 คุณแพ้'}</h3><p style="color:#999">${myUser.name}: ${ms} ครั้ง vs ${opp?.name}: ${os} ครั้ง</p><p style="color:#999;margin-top:6px">${wname} ได้สิทธิ์เชียร์ ${t?t.f+' '+t.n:conflict.team}!</p></div>`;await recordWin(wuid,wname,conflict,'กดปุ่มให้เร็ว','sr');}
+  document.getElementById('speedResultArea').innerHTML=html;document.getElementById('speedStatus').textContent='จบแล้ว!';
+}
+
+// ===== STOP THE CLOCK =====
+function updateClock(){
+  const myC=getMyConflict();if(!myC){document.getElementById('clockStatus').textContent='ไม่มีทีมซ้ำ ✅';document.getElementById('clockReadyBtn').style.display='none';return;}
+  const opp=myC.members.find(m=>m.uid!==myUser.uid);
+  // ถ้าเกมนี้จบแล้ว
+  const cr=Object.values((roomData.gs||{}).cr||{});
+  const gameFinished=cr.find(r=>r.team===myC.team);
+  if(gameFinished){document.getElementById('clockStatus').textContent=gameFinished.uid===myUser.uid?'✅ คุณชนะเกมนี้!':'❌ คุณแพ้เกมนี้';document.getElementById('clockReadyBtn').style.display='none';document.getElementById('clockStopBtn').disabled=true;return;}
+  const cl=(roomData.gs||{}).cl||{};
+  const mr=cl['r_'+myUser.uid],or=opp&&cl['r_'+opp.uid];
+  document.getElementById('clockPlayers').innerHTML=myC.members.map(m=>`<div class="gp-chip ${cl['st_'+m.uid]!==undefined?'ready':''}">${m.avatar?`<img src="${m.avatar}" alt="">`:''}${m.name} ${cl['st_'+m.uid]!==undefined?'⏹️':''}</div>`).join('');
+  const allStopped=myC.members.every(m=>cl['st_'+m.uid]!==undefined);
+  if(allStopped&&!clockRunning){showClockResult(myC,cl);document.getElementById('clockReadyBtn').style.display='none';document.getElementById('clockStopBtn').disabled=true;}
+  else if(cl.started&&!clockRunning&&!clockStopped){startClockGame(cl);}
+  else if(!cl.started){
+    document.getElementById('clockStatus').textContent=mr?'รออีกฝ่ายพร้อม...':'กด "ฉันพร้อม!" เพื่อเริ่ม';
+    document.getElementById('clockReadyBtn').style.display=mr?'none':'inline-block';
+    document.getElementById('clockStopBtn').disabled=true;document.getElementById('clockResultRow').innerHTML='';document.getElementById('clockResultArea').innerHTML='';document.getElementById('clockPlayAgain').style.display='none';
+    if(mr&&or&&!cl.started)startClockCountdown(myC);
+  }
+}
+window.clockReady=async()=>{if(!roomCode)return;await update(ref(db,'rooms/'+roomCode+'/gs/cl'),{['r_'+myUser.uid]:true});document.getElementById('clockReadyBtn').style.display='none';document.getElementById('clockStatus').textContent='รออีกฝ่ายพร้อม...';};
+async function startClockCountdown(conflict){const st=Date.now()+3500;await update(ref(db,'rooms/'+roomCode+'/gs/cl'),{cd:st});let iv=setInterval(()=>{const r=Math.ceil((st-Date.now())/1000);if(r>0)document.getElementById('clockStatus').textContent=`เริ่มใน ${r}...`;else{clearInterval(iv);update(ref(db,'rooms/'+roomCode+'/gs/cl'),{started:true,startTime:Date.now()});}},200);}
+function startClockGame(cl){if(clockRunning)return;clockRunning=true;clockStopped=false;clockStart=cl.startTime||Date.now();document.getElementById('clockStopBtn').disabled=false;document.getElementById('clockStatus').textContent='⏱️ กดหยุดเมื่อถึง 5.00 วินาที!';
+  clockInterval=setInterval(async()=>{const e=(Date.now()-clockStart)/1000;document.getElementById('clockBar').style.width=Math.min(e/10,1)*100+'%';document.getElementById('clockTimeDisplay').textContent=e.toFixed(2);if(e>=10){clearInterval(clockInterval);clockRunning=false;document.getElementById('clockStopBtn').disabled=true;if(!clockStopped){await update(ref(db,'rooms/'+roomCode+'/gs/cl'),{['st_'+myUser.uid]:e.toFixed(3)});clockStopped=true;}}},50);}
+window.clockStop=async()=>{if(!clockRunning||clockStopped)return;clearInterval(clockInterval);clockRunning=false;clockStopped=true;const e=((Date.now()-clockStart)/1000);document.getElementById('clockStopBtn').disabled=true;document.getElementById('clockStatus').textContent=`คุณหยุดที่ ${e.toFixed(2)}s รอผลอีกฝ่าย...`;await update(ref(db,'rooms/'+roomCode+'/gs/cl'),{['st_'+myUser.uid]:e.toFixed(3)});};
+async function showClockResult(conflict,cl){
+  const TARGET=5.0,opp=conflict.members.find(m=>m.uid!==myUser.uid);
+  const mt=parseFloat(cl['st_'+myUser.uid]||0),ot=opp?parseFloat(cl['st_'+opp.uid]||0):999;
+  const md=Math.abs(mt-TARGET),od=Math.abs(ot-TARGET);const t=TEAMS.find(x=>x.e===conflict.team);
+  let out,wuid,wname;
+  if(Math.abs(md-od)<0.005)out='draw';else if(md<od){out='win';wuid=myUser.uid;wname=myUser.name;}else{out='lose';wuid=opp.uid;wname=opp.name;}
+  document.getElementById('clockResultRow').innerHTML=`
+    <div class="clock-result-box ${out==='win'?'winner-box':''}"><div class="cr-name">${myUser.name} (คุณ)</div><div class="cr-time" style="color:${out==='win'?'var(--green)':'var(--red)'}">${mt.toFixed(2)}s</div><div class="cr-diff">ห่าง ${md.toFixed(3)}s</div></div>
+    <div class="clock-result-box ${out==='lose'?'winner-box':''}"><div class="cr-name">${opp?.name}</div><div class="cr-time" style="color:${out==='lose'?'var(--green)':'var(--red)'}">${ot.toFixed(2)}s</div><div class="cr-diff">ห่าง ${od.toFixed(3)}s</div></div>`;
+  let html='';
+  if(out==='draw'){html=`<div class="game-result draw"><span class="gr-emoji">🤝</span><h3 style="color:var(--gold)">เสมอ! เล่นใหม่!</h3></div>`;document.getElementById('clockPlayAgain').style.display='block';}
+  else{const w=out==='win';html=`<div class="game-result ${out}"><span class="gr-emoji">${w?'🏆':'😢'}</span><h3 style="color:${w?'var(--green)':'var(--red)'}">${w?'🎉 คุณชนะ!':'😢 คุณแพ้'}</h3><p style="color:#999">${wname} แม่นกว่า! ได้สิทธิ์เชียร์ ${t?t.f+' '+t.n:conflict.team}!</p></div>`;await recordWin(wuid,wname,conflict,'หยุดตรงเวลา','cr');}
+  document.getElementById('clockResultArea').innerHTML=html;document.getElementById('clockStatus').textContent='จบแล้ว!';
+}
+
+// RECORD WIN
+async function recordWin(wuid,wname,conflict,gameName,key){
+  const gs=roomData.gs||{};const existing=Object.values(gs[key]||{}).find(r=>r.team===conflict.team);if(existing)return;
+  if(wuid===myUser.uid){
+    const res=gs[key]||{};res['r'+Date.now()]={uid:wuid,name:wname,team:conflict.team,game:gameName,at:Date.now()};
+    await update(ref(db,'rooms/'+roomCode+'/gs'),{[key]:res});
+    // ไม่ลบทีมของผู้แพ้ทันที รอให้ชนะ 2 ใน 3 ก่อน
+  }
+}
+
+// RESET GAME (เฉพาะเกมที่เสมอ)
+window.resetGame=async(game)=>{
+  if(!roomCode)return;const myC=getMyConflict();if(!myC)return;
+  clearInterval(speedInterval);clearInterval(clockInterval);speedRunning=false;clockRunning=false;clockStopped=false;
+  if(game==='rps'){const u={};myC.members.forEach(m=>{u['rooms/'+roomCode+'/gs/rs/'+m.uid]=null;});await update(ref(db),u);document.getElementById('rpsResultArea').innerHTML='';document.getElementById('rpsPlayAgain').style.display='none';}
+  if(game==='speed'){await update(ref(db,'rooms/'+roomCode+'/gs'),{sp:null});speedMyCount=0;document.getElementById('speedResultArea').innerHTML='';document.getElementById('speedPlayAgain').style.display='none';document.getElementById('speedTimer').textContent='';document.getElementById('speedTapBtn').disabled=true;document.getElementById('speedReadyBtn').style.display='inline-block';}
+  if(game==='clock'){await update(ref(db,'rooms/'+roomCode+'/gs'),{cl:null});document.getElementById('clockResultArea').innerHTML='';document.getElementById('clockResultRow').innerHTML='';document.getElementById('clockPlayAgain').style.display='none';document.getElementById('clockBar').style.width='0%';document.getElementById('clockTimeDisplay').textContent='0.00';document.getElementById('clockStopBtn').disabled=true;document.getElementById('clockReadyBtn').style.display='inline-block';}
+  toast('🔄 เสมอ — เล่นเกมนี้ใหม่!');
+};
+
+// ===== BETTING SYSTEM =====
+const STARTING_COINS = 1000;
+const POINTS_PER_WIN = 3;
+let currentBetPick = null;
+let joiningBetId = null;
+
+// สร้าง matches จาก TEAMS data
+function generateMatches() {
+  const matches = [];
+  const groups = [...new Set(TEAMS.map(t=>t.g))];
+  groups.forEach(g => {
+    const gTeams = TEAMS.filter(t=>t.g===g);
+    for(let i=0;i<gTeams.length;i++){
+      for(let j=i+1;j<gTeams.length;j++){
+        matches.push({
+          id: `${g}_${gTeams[i].e}_${gTeams[j].e}`.replace(/\s/g,'_'),
+          group: g,
+          home: gTeams[i],
+          away: gTeams[j],
+          label: `${gTeams[i].f} ${gTeams[i].n} vs ${gTeams[j].n} ${gTeams[j].f}`
+        });
+      }
+    }
+  });
+  return matches;
+}
+const ALL_MATCHES = generateMatches();
+
+async function ensureCoins(uid, name) {
+  const coinRef = ref(db, 'rooms/'+roomCode+'/coins/'+uid);
+  const snap = await new Promise(res=>{const u=onValue(coinRef,s=>{u();res(s);});});
+  if(!snap.val()) {
+    await update(ref(db,'rooms/'+roomCode+'/coins'), {[uid]: {coins:STARTING_COINS, points:0, name}});
+  }
+}
+
+function getMyCoins() {
+  const coins = roomData.coins?.[myUser.uid];
+  return coins?.coins ?? STARTING_COINS;
+}
+function getMyPoints() {
+  return roomData.coins?.[myUser.uid]?.points ?? 0;
+}
+
+// RENDER BET TAB
+function renderBetTab() {
+  if(!roomCode||!myUser) return;
+  ensureCoins(myUser.uid, myUser.name);
+  renderLeaderboard();
+  renderBets();
+  document.getElementById('createBetBtnArea').style.display='block';
+}
+
+function renderLeaderboard() {
+  const coins = roomData.coins || {};
+  const members = roomData.members || {};
+  // Merge coins with members
+  const allUids = new Set([...Object.keys(coins), ...Object.keys(members)]);
+  const entries = [...allUids].map(uid => ({
+    uid,
+    name: coins[uid]?.name || members[uid]?.name || 'ไม่ทราบ',
+    avatar: members[uid]?.avatar || '',
+    coins: coins[uid]?.coins ?? STARTING_COINS,
+    points: coins[uid]?.points ?? 0,
+  })).sort((a,b)=> b.points!==a.points ? b.points-a.points : b.coins-a.coins);
+
+  const list = document.getElementById('leaderboard-list');
+  if(!entries.length){list.innerHTML='<div style="color:#555;text-align:center;padding:10px">ยังไม่มีข้อมูล</div>';return;}
+  list.innerHTML = entries.map((e,i)=>{
+    const rankClass = i===0?'top1':i===1?'top2':i===2?'top3':'';
+    const rankEmoji = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    const isMe = e.uid===myUser.uid;
+    return `<div class="lb-item ${isMe?'me':''}">
+      <span class="lb-rank ${rankClass}">${rankEmoji||i+1}</span>
+      ${e.avatar?`<img src="${e.avatar}" style="width:28px;height:28px;border-radius:50%;">`:'<span>👤</span>'}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.88rem;font-weight:700">${e.name}${isMe?' (คุณ)':''}</div>
+        <div class="lb-pts">⭐ ${e.points} คะแนน</div>
+      </div>
+      <span class="lb-coins">🪙 ${e.coins.toLocaleString()}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderBets() {
+  const bets = roomData.bets || {};
+  const list = document.getElementById('betsList');
+  const betArr = Object.entries(bets).sort((a,b)=>b[1].createdAt-a[1].createdAt);
+  if(!betArr.length){list.innerHTML='<div style="color:#555;text-align:center;padding:20px">ยังไม่มีเดิมพัน — กด "สร้างเดิมพันใหม่" เลย!</div>';return;}
+
+  list.innerHTML = betArr.map(([betId, bet])=>{
+    const isCreator = bet.creatorUid === myUser.uid;
+    const isJoiner = bet.joinerUid === myUser.uid;
+    const isMine = isCreator || isJoiner;
+    const opt1=bet.opt1||bet.homeTeam||'ตัวเลือก 1';
+    const opt2=bet.opt2||'เสมอ';
+    const opt3=bet.opt3||bet.awayTeam||'ตัวเลือก 3';
+    const pickLabel={opt1:opt1, opt2:opt2, opt3:opt3, home:opt1, draw:opt2, away:opt3};
+    const resultLabel={opt1:`✅ ${opt1}`,opt2:`✅ ${opt2}`,opt3:`✅ ${opt3}`,home:`✅ ${opt1}`,draw:`✅ ${opt2}`,away:`✅ ${opt3}`};
+
+    let statusBadge='', actionHtml='';
+    if(bet.status==='open'){
+      statusBadge=`<span style="color:var(--accent);font-size:.75rem">🟢 รอคู่แข่ง</span>`;
+      if(!isCreator && !isJoiner){
+        actionHtml=`<button class="btn btn-gold btn-sm" onclick="openJoinModal('${betId}')">✋ เข้าร่วม</button>`;
+      }
+    } else if(bet.status==='matched'){
+      statusBadge=`<span style="color:var(--gold);font-size:.75rem">🟡 จับคู่แล้ว รอผล</span>`;
+      if(isCreator){
+        actionHtml=`<div style="margin-top:8px"><div class="label">ตัดสินผล:</div><div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn btn-sm" style="background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);color:var(--green);" onclick="settleBet('${betId}','opt1')">${opt1}</button>
+          <button class="btn btn-sm" style="background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);color:var(--gold);" onclick="settleBet('${betId}','opt2')">${opt2}</button>
+          <button class="btn btn-sm" style="background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3);color:var(--accent);" onclick="settleBet('${betId}','opt3')">${opt3}</button>
+        </div></div>`;
+      }
+    } else if(bet.status==='settled'){
+      const myPick=isCreator?bet.creatorPick:bet.joinerPick;
+      const iWon=bet.result===myPick;
+      statusBadge=isMine
+        ? `<span style="color:${iWon?'var(--green)':'var(--red)'};font-size:.75rem">${iWon?'✅ คุณชนะ!':'❌ คุณแพ้'}</span>`
+        : `<span style="color:#666;font-size:.75rem">✅ จบแล้ว</span>`;
+    }
+
+    let cardClass=`bet-card ${bet.status}`;
+    if(bet.status==='settled'&&isMine){
+      const myPick=isCreator?bet.creatorPick:bet.joinerPick;
+      cardClass=`bet-card settled-${bet.result===myPick?'win':'lose'}`;
+    }
+
+    const cpName=bet.creatorPick?pickLabel[bet.creatorPick]:'—';
+    const jpName=bet.joinerPick?pickLabel[bet.joinerPick]:'—';
+
+    return `<div class="${cardClass}">
+      <div class="bet-match">${bet.matchLabel}</div>
+      <div class="bet-meta">กลุ่ม ${bet.group} · สร้างโดย ${bet.creatorName} · ${statusBadge}</div>
+      <div class="bet-sides">
+        <div class="bet-side ${bet.status==='settled'&&bet.result==='opt1'?'winner':''}">
+          <div style="font-size:.72rem;color:#888">ตัวเลือก 1</div>
+          <div style="font-weight:700;font-size:.85rem">${opt1}</div>
+          <div style="font-size:.7rem;color:#aaa;margin-top:2px">${bet.creatorPick==='opt1'?bet.creatorName:bet.joinerPick==='opt1'?bet.joinerName:'—'}</div>
+        </div>
+        <div class="bet-side ${bet.status==='settled'&&bet.result==='opt2'?'winner':''}">
+          <div style="font-size:.72rem;color:#888">ตัวเลือก 2</div>
+          <div style="font-weight:700;font-size:.85rem">${opt2}</div>
+          <div style="font-size:.7rem;color:#aaa;margin-top:2px">${bet.creatorPick==='opt2'?bet.creatorName:bet.joinerPick==='opt2'?bet.joinerName:'—'}</div>
+        </div>
+        <div class="bet-side ${bet.status==='settled'&&bet.result==='opt3'?'winner':''}">
+          <div style="font-size:.72rem;color:#888">ตัวเลือก 3</div>
+          <div style="font-weight:700;font-size:.85rem">${opt3}</div>
+          <div style="font-size:.7rem;color:#aaa;margin-top:2px">${bet.creatorPick==='opt3'?bet.creatorName:bet.joinerPick==='opt3'?bet.joinerName:'—'}</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <span class="bet-amount">🪙 ${bet.amount.toLocaleString()} เหรียญ</span>
+        ${bet.status==='settled'?`<span style="font-size:.8rem;color:#888">ผล: ${resultLabel[bet.result]||bet.result}</span>`:''}
+      </div>
+      ${actionHtml}
+    </div>`;
+  }).join('');
+}
+
+// CREATE BET
+window.showCreateBet=()=>{
+  const maxCoins=Math.min(getMyCoins(), 1000);
+  const slider=document.getElementById('betAmountSlider');
+  slider.max=Math.max(maxCoins,10);
+  slider.value=Math.min(100,maxCoins);
+  document.getElementById('betAmountDisplay').textContent=slider.value;
+  document.getElementById('betAmount').value=slider.value;
+  document.getElementById('createBetForm').style.display='block';
+  document.getElementById('createBetBtnArea').style.display='none';
+  currentBetPick=null; resetBetPickBtns();
+};
+window.hideCreateBet=()=>{ document.getElementById('createBetForm').style.display='none'; document.getElementById('createBetBtnArea').style.display='block'; currentBetPick=null; resetBetPickBtns(); };
+
+window.renderMatchSelect=()=>{
+  const g=document.getElementById('betGroupSelect').value;
+  const msa=document.getElementById('matchSelectArea');
+  const koa=document.getElementById('koMatchArea');
+  if(!g){msa.style.display='none';koa.style.display='none';return;}
+  if(g==='KO'){msa.style.display='none';koa.style.display='block';document.getElementById('opt1Label').placeholder='ทีมเจ้าบ้าน';document.getElementById('opt2Label').placeholder='เสมอ';document.getElementById('opt3Label').placeholder='ทีมเยือน';return;}
+  const ms=document.getElementById('betMatchSelect');
+  const gMatches=ALL_MATCHES.filter(m=>m.group===g);
+  ms.innerHTML=gMatches.map(m=>`<option value="${m.id}">${m.label}</option>`).join('');
+  msa.style.display='block'; koa.style.display='none';
+  updatePickLabels();
+};
+
+window.updatePickLabels=()=>{
+  const g=document.getElementById('betGroupSelect').value;
+  if(g==='KO'||!g) return;
+  const matchId=document.getElementById('betMatchSelect').value;
+  const match=ALL_MATCHES.find(m=>m.id===matchId);
+  if(!match) return;
+  // อัปเดต label แต่ไม่ reset pick ที่เลือกไว้แล้ว
+  document.getElementById('opt1Label').value=match.home.n;
+  document.getElementById('opt2Label').value='เสมอ';
+  document.getElementById('opt3Label').value=match.away.n;
+  document.getElementById('pickOpt1').textContent=match.home.f+' '+match.home.n;
+  document.getElementById('pickOpt2').textContent='🤝 เสมอ';
+  document.getElementById('pickOpt3').textContent=match.away.f+' '+match.away.n;
+  // ถ้า match เปลี่ยน reset pick (เพราะตัวเลือกเปลี่ยน)
+  currentBetPick=null; resetBetPickBtns();
+};
+
+window.setBetPick=(pick)=>{
+  currentBetPick=pick;
+  resetBetPickBtns();
+  document.getElementById('pick'+pick[0].toUpperCase()+pick.slice(1)).classList.add('active');
+};
+function resetBetPickBtns(){ ['Opt1','Opt2','Opt3'].forEach(p=>document.getElementById('pick'+p)?.classList.remove('active')); }
+
+window.submitCreateBet=async()=>{
+  if(!roomCode||!myUser){toast('⚠️ เข้าห้องก่อน!');return;}
+  const g=document.getElementById('betGroupSelect').value;
+  if(!g){toast('⚠️ เลือกกลุ่มก่อน');return;}
+  if(!currentBetPick){toast('⚠️ กดเลือกตัวเลือกที่คุณทายก่อน!');return;}
+
+  const opt1=(document.getElementById('opt1Label').value||'').trim()||'ตัวเลือก 1';
+  const opt2=(document.getElementById('opt2Label').value||'').trim()||'ตัวเลือก 2';
+  const opt3=(document.getElementById('opt3Label').value||'').trim()||'ตัวเลือก 3';
+  const amount=parseInt(document.getElementById('betAmount').value)||100;
+
+  await ensureCoins(myUser.uid,myUser.name);
+  const myCoins=getMyCoins();
+  if(amount>myCoins){toast(`⚠️ เหรียญไม่พอ! คุณมี 🪙 ${myCoins}`);return;}
+
+  let matchLabel,homeTeam,awayTeam,matchGroup;
+  if(g==='KO'){
+    homeTeam=(document.getElementById('koHome').value||'').trim()||'ทีม A';
+    awayTeam=(document.getElementById('koAway').value||'').trim()||'ทีม B';
+    matchLabel=homeTeam+' vs '+awayTeam; matchGroup='KO';
+  } else {
+    const matchId=document.getElementById('betMatchSelect').value;
+    if(!matchId){toast('⚠️ เลือกคู่แข่งก่อน');return;}
+    const match=ALL_MATCHES.find(m=>m.id===matchId);
+    if(!match){toast('⚠️ ไม่พบคู่แข่ง กรุณาเลือกใหม่');return;}
+    homeTeam=match.home.n; awayTeam=match.away.n; matchLabel=match.label; matchGroup=match.group;
+  }
+
+  await update(ref(db,'rooms/'+roomCode+'/coins/'+myUser.uid),{coins:myCoins-amount});
+  const betId='bet_'+Date.now();
+  await update(ref(db,'rooms/'+roomCode+'/bets'),{
+    [betId]:{matchLabel,homeTeam,awayTeam,group:matchGroup,opt1,opt2,opt3,
+      creatorUid:myUser.uid,creatorName:myUser.name,creatorAvatar:myUser.avatar||'',
+      creatorPick:currentBetPick,amount,status:'open',createdAt:Date.now()}
+  });
+  toast(`✅ สร้างเดิมพัน "${[opt1,opt2,opt3][['opt1','opt2','opt3'].indexOf(currentBetPick)]}" ${amount} 🪙 แล้ว!`);
+  hideCreateBet();
+  document.getElementById('betAmountSlider').value='100';
+  document.getElementById('betAmountDisplay').textContent='100';
+  document.getElementById('betAmount').value='100';
+  currentBetPick=null;
+};
+
+// JOIN BET
+window.openJoinModal=(betId)=>{
+  joiningBetId=betId;
+  const bet=roomData.bets?.[betId];
+  if(!bet)return;
+  const opt1=bet.opt1||bet.homeTeam||'ตัวเลือก 1';
+  const opt2=bet.opt2||'เสมอ';
+  const opt3=bet.opt3||bet.awayTeam||'ตัวเลือก 3';
+  const allOpts={opt1,opt2,opt3};
+  // ผู้เข้าร่วมเลือกได้เฉพาะตัวเลือกที่ไม่ใช่ของ creator
+  const availPicks=Object.keys(allOpts).filter(k=>k!==bet.creatorPick);
+  document.getElementById('joinBetInfo').textContent=`${bet.matchLabel} · 🪙 ${bet.amount} เหรียญ · ${bet.creatorName} ทาย: ${allOpts[bet.creatorPick]}`;
+  document.getElementById('joinAmountRequired').textContent=bet.amount;
+  document.getElementById('joinAmount').value=bet.amount;
+  currentBetPick=null;
+  document.getElementById('joinPickArea').innerHTML=availPicks.map(p=>`<button class="bet-pick-btn" onclick="setJoinPick('${p}')" id="joinPick_${p}">${allOpts[p]}</button>`).join('');
+  document.getElementById('joinBetModal').style.display='flex';
+};
+window.closeJoinModal=()=>{ document.getElementById('joinBetModal').style.display='none'; joiningBetId=null; currentBetPick=null; };
+window.setJoinPick=(pick)=>{ currentBetPick=pick; document.querySelectorAll('#joinPickArea .bet-pick-btn').forEach(b=>b.classList.remove('active')); document.getElementById('joinPick_'+pick)?.classList.add('active'); };
+
+window.submitJoinBet=async()=>{
+  if(!joiningBetId||!currentBetPick){toast('⚠️ เลือกตัวเลือกก่อน');return;}
+  const bet=roomData.bets?.[joiningBetId];
+  if(!bet||bet.status!=='open'){toast('⚠️ เดิมพันนี้ไม่พร้อมแล้ว');return;}
+  await ensureCoins(myUser.uid,myUser.name);
+  if(bet.amount>getMyCoins()){toast(`⚠️ เหรียญไม่พอ! คุณมี 🪙 ${getMyCoins()}`);return;}
+  const myCoins=getMyCoins();
+  await update(ref(db,'rooms/'+roomCode+'/coins/'+myUser.uid),{coins:myCoins-bet.amount});
+  await update(ref(db,'rooms/'+roomCode+'/bets/'+joiningBetId),{
+    joinerUid:myUser.uid, joinerName:myUser.name, joinerAvatar:myUser.avatar||'',
+    joinerPick:currentBetPick, status:'matched'
+  });
+  toast(`✅ เข้าร่วมเดิมพัน ${bet.amount} 🪙 แล้ว!`);
+  closeJoinModal();
+};
+
+// SETTLE BET
+window.settleBet=async(betId,result)=>{
+  const bet=roomData.bets?.[betId];
+  if(!bet||bet.status!=='matched'){toast('⚠️ ไม่สามารถตัดสินได้');return;}
+  if(bet.creatorUid!==myUser.uid){toast('⚠️ เฉพาะผู้สร้างเดิมพันเท่านั้น');return;}
+  const opt1=bet.opt1||bet.homeTeam||'ตัวเลือก 1';
+  const opt2=bet.opt2||'เสมอ';
+  const opt3=bet.opt3||bet.awayTeam||'ตัวเลือก 3';
+  const allOpts={opt1,opt2,opt3};
+  if(!confirm(`ยืนยันผล: "${allOpts[result]}" ใช่ไหม?`))return;
+
+  const winnerUid=bet.creatorPick===result?bet.creatorUid:bet.joinerPick===result?bet.joinerUid:null;
+
+  await update(ref(db,'rooms/'+roomCode+'/bets/'+betId),{status:'settled',result,settledAt:Date.now(),winnerUid:winnerUid||'draw'});
+
+  if(winnerUid){
+    const winnerCoins=roomData.coins?.[winnerUid]?.coins??STARTING_COINS;
+    const winnerPoints=roomData.coins?.[winnerUid]?.points??0;
+    await update(ref(db,'rooms/'+roomCode+'/coins/'+winnerUid),{coins:winnerCoins+bet.amount*2, points:winnerPoints+POINTS_PER_WIN});
+    toast(`✅ ตัดสินผลแล้ว! "${allOpts[result]}" ชนะ — ได้ 🪙 ${bet.amount*2} เหรียญ!`);
+  } else {
+    // ผลไม่ตรงทั้งคู่ → เสมอ คืนเงิน
+    const cCoins=roomData.coins?.[bet.creatorUid]?.coins??STARTING_COINS;
+    const jCoins=roomData.coins?.[bet.joinerUid]?.coins??STARTING_COINS;
+    await update(ref(db,'rooms/'+roomCode+'/coins'),{
+      [bet.creatorUid]:{...roomData.coins?.[bet.creatorUid], coins:cCoins+bet.amount},
+      [bet.joinerUid]:{...roomData.coins?.[bet.joinerUid], coins:jCoins+bet.amount}
+    });
+    toast('🤝 ไม่มีใครทายถูก — คืนเหรียญให้ทั้งคู่!');
+  }
+};
+
+// INIT
+window.addEventListener('load', async()=>{
+  const p=new URLSearchParams(window.location.search),code=p.get('code'),state=p.get('state');
+  const saved=localStorage.getItem('lu');
+  if(saved){myUser=JSON.parse(saved);showApp();return;}
+  if(code&&state){await handleLineCallback(code);return;}
+  document.getElementById('loginScreen').style.display='flex';
+});
+</script>
+</body>
+</html>
